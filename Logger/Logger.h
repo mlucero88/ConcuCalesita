@@ -7,11 +7,13 @@
 
 #ifndef LOGGER_H
 #define LOGGER_H
+
 #include <fstream>
 #include <iostream>
 #include <cstdarg>
 #include <string>
 #include <time.h>
+#include "EstadosNinio.h"
 
 using namespace std;
 #define LOGGER Logger::getLogger()
@@ -22,19 +24,13 @@ using namespace std;
 class Logger
 {
 public:
-	enum Estado { COLA_BOLETERIA=0,
-				  COLA_CALESITA=1,
-				  EN_CALESITA=2,
-				  COLA_SALIDA=3,
-				  SALIO=4 };
-
     /**
      *   Logs a message
      *   @param nombre: nombre del ninio.
      *	 @param estado
      *
      */
-    void Log(const std::string& nombre, Logger::Estado);
+    void Log(const std::string& nombre, Estado);
     /**
      *   Logs a message
      *   @param sMessage message to be logged.

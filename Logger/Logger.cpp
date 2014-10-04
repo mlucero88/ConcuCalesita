@@ -52,7 +52,7 @@ void Logger::Log( const char * format, ... ){
     va_end (args);
 }
 
-void Logger::Log(const std::string& nombre, Logger::Estado estado){
+void Logger::Log(const std::string& nombre, Estado estado){
     m_Logfile <<"\n"<< currentDateTime() <<":\t";
     m_Logfile << nombre <<":\t";
     m_Logfile << enumToString(estado);
