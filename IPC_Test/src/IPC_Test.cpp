@@ -4,14 +4,15 @@
 #include <cstdlib>
 #include <sys/wait.h>
 #include <cerrno>
-#include "SharedMemoryBlock.h"
+#include "Shared_Memory/SharedMemoryBlock.h"
 #include "NoPointerData.h"
 
 //#define TEST_SHAREDMEMORY
 #define TEST_SHAREDMEMORYBLOCK
 //#define TEST_SHAREDMEMORYDATA
 
-static const char* ruta = "/home/martin/workspace/SM_Test/src/SM_Test.cpp";
+static const char* ruta =
+		"/home/martin/Repositorios/ConcuCalesita/IPC_Test/src/IPC_Test.cpp";
 
 using namespace std;
 

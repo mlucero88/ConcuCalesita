@@ -1,7 +1,7 @@
 #ifndef SHAREDMEMORYDATA_H_
 #define SHAREDMEMORYDATA_H_
 
-#include "ByteStream.h"
+#include "../Common/ByteStream.h"
 
 class SharedMemoryData {
 public:

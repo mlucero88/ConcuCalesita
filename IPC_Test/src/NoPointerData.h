@@ -1,7 +1,7 @@
 #ifndef NOPOINTERDATA_H_
 #define NOPOINTERDATA_H_
 
-#include "SharedMemoryData.h"
+#include "Shared_Memory/SharedMemoryData.h"
 
 class NoPointerData: public SharedMemoryData {
 public:
