@@ -1,31 +1,30 @@
-#ifndef SHAREDMEMORYEXCEPTION_H_
-#define SHAREDMEMORYEXCEPTION_H_
+#ifndef LOCKEXCEPTION_H_
+#define LOCKEXCEPTION_H_
 
 #include <exception>
 #include <string>
 
 /**
- * @brief Clase que define una excepcion en la manipulacion de memoria
- * compartida
+ * @brief Clase que define una excepcion en la manipulacion de locks
  */
 
-class SharedMemoryException: public std::exception {
+class LockException: public std::exception {
 public:
 
 	enum FunctionCode {
-		shmget, shmat, shmdt, shmctl, ftok
+		invalidFile, fcntl
 	};
 
 	/**
 	 * @brief Constructor
 	 * @param fnCode Codigo de la funcion que genero la excepcion
 	 */
-	explicit SharedMemoryException(enum FunctionCode fnCode) throw();
+	explicit LockException(enum FunctionCode fnCode) throw();
 
 	/**
 	 * @brief Destructor
 	 */
-	virtual ~SharedMemoryException() throw();
+	virtual ~LockException() throw();
 
 	/**
 	 * @brief Metodo que obtiene el codigo de la funcion que genero la

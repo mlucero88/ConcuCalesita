@@ -2,9 +2,8 @@
 #include <cerrno>
 #include <cstring>
 
-SharedMemoryException::SharedMemoryException(enum FunctionCode fnCode) throw() {
-	error_message.assign("Error en ");
-
+SharedMemoryException::SharedMemoryException(enum FunctionCode fnCode) throw() :
+		error_message("Error in "), code(fnCode) {
 	switch (fnCode) {
 	case shmget:
 		error_message.append("shmget() - ");
@@ -26,6 +25,10 @@ SharedMemoryException::SharedMemoryException(enum FunctionCode fnCode) throw() {
 }
 
 SharedMemoryException::~SharedMemoryException() throw() {
+}
+
+SharedMemoryException::FunctionCode SharedMemoryException::getCode() const throw() {
+	return code;
 }
 
 const char* SharedMemoryException::what() const throw() {

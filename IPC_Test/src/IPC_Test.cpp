@@ -5,11 +5,14 @@
 #include <sys/wait.h>
 #include <cerrno>
 #include "Shared_Memory/SharedMemoryBlock.h"
+#include "Lock/Lock.h"
 #include "NoPointerData.h"
 
 //#define TEST_SHAREDMEMORY
 #define TEST_SHAREDMEMORYBLOCK
 //#define TEST_SHAREDMEMORYDATA
+
+//#define TEST_LOCKS
 
 static const char* ruta =
 		"/home/martin/Repositorios/ConcuCalesita/IPC_Test/src/IPC_Test.cpp";
