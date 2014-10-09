@@ -36,3 +36,17 @@ void Lock::releaseLock() {
 Lock::~Lock() {
 	close(fd);
 }
+
+/* Nota Teorica. Si hago:
+ *
+ * 	fl.l_type = F_RDLCK;
+ *	fcntl(fd, F_SETLKW, &fl);
+ * 	fl.l_type = F_WRLCK;
+ *	fcntl(fd, F_SETLKW, &fl);
+ *
+ *	me cambia de un SharedLock a un ExclusiveLock sin tener que hacer unlock y
+ *	las funciones retornan 0 (no se considera error)
+ *
+ *	Hacer varias veces seguidas fcntl(fd, F_SETLKW, &fl) desde un mismo proceso
+ *	no causa errores (la funcion retorna 0 siempre)
+ */

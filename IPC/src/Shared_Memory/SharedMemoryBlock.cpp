@@ -1,27 +1,26 @@
 #include "SharedMemoryBlock.h"
-#include "SharedMemoryData.h"
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-
-#include <iostream>
-#include <cerrno>
 #include <cstring>
 
-SharedMemoryBlock::SharedMemoryBlock(const std::string& file, char character) {
-	key_t key = ftok(file.c_str(), character);
+SharedMemoryBlock::SharedMemoryBlock(const std::string& filename,
+		char character, size_t blockSize) :
+		lock(filename), blockSize(blockSize) {
+	key_t key = ftok(filename.c_str(), character);
 
 	if (key > 0) {
-		// todo Poder setear permisos?
-		shmId = shmget(key, sizeof(ByteStream), 0644 | IPC_CREAT);
+		shmId = shmget(key, blockSize + sizeof(size_t), 0644 | IPC_CREAT);
 
 		if (shmId > 0) {
 			void* tmpPtr = shmat(shmId, NULL, 0);
 			if (tmpPtr != (void*) -1) {
-				ptrData = static_cast< ByteStream* >(tmpPtr);
+				ptrData = static_cast< byte_t* >(tmpPtr);
 			}
 			else {
-				// todo Liberar la memoria obtenida en shmget?
+				if (getAmountProcessesAttached() == 0) {
+					shmctl(shmId, IPC_RMID, NULL);
+				}
 				throw SharedMemoryException(SharedMemoryException::shmat);
 			}
 		}
@@ -34,31 +33,65 @@ SharedMemoryBlock::SharedMemoryBlock(const std::string& file, char character) {
 	}
 }
 
-SharedMemoryBlock::~SharedMemoryBlock() {
-	int errorDt = shmdt(static_cast< void* >(ptrData));
+size_t SharedMemoryBlock::write(const ByteStream& data) {
+	size_t dataSize = data.getTamanioOcupado();
+	if (blockSize < dataSize) {
+		throw SharedMemoryException(SharedMemoryException::write_size);
+	}
+	try {
+		lock.seizeExclusiveLock();
+		memcpy(ptrData, &dataSize, sizeof(size_t));
+		memcpy(ptrData + sizeof(size_t), data.obtenerStream(), dataSize);
+		lock.releaseLock();
+	}
+	catch(LockException &e) {
+		throw SharedMemoryException(SharedMemoryException::write_lock);
+	}
+	return dataSize;
+}
 
-	if (errorDt != -1) {
+size_t SharedMemoryBlock::read(ByteStream& data) const {
+	size_t dataSize = 0;
+	byte_t* buffer = NULL;
+	try {
+		lock.seizeSharedLock();
+		memcpy(&dataSize, ptrData, sizeof(size_t));
+		buffer = new byte_t[dataSize];
+		memcpy(buffer, ptrData + sizeof(size_t), dataSize);
+		lock.releaseLock();
+		data.asignarStream(buffer, dataSize);
+	}
+	catch(LockException &e) {
+		delete[] buffer;
+		throw SharedMemoryException(SharedMemoryException::read_lock);
+	}
+	delete[] buffer;
+	return dataSize;
+}
+
+void SharedMemoryBlock::freeResources() const {
+	if (shmdt(static_cast< void* >(ptrData)) != -1) {
 		if (getAmountProcessesAttached() == 0) {
-			shmctl(this->shmId, IPC_RMID, NULL);
+			if (shmctl(shmId, IPC_RMID, NULL) == -1) {
+				throw SharedMemoryException(SharedMemoryException::shmctl);
+			}
 		}
 	}
 	else {
-		// todo Buscar otra forma y sacar iostream
-		std::cerr << "Error en shmdt(): " << strerror(errno) << std::endl;
+		throw SharedMemoryException(SharedMemoryException::shmdt);
 	}
 }
 
-void SharedMemoryBlock::write(const SharedMemoryData &data) {
-	// todo Hacer boundcheck
-	*ptrData = data.serialize();
-}
-
-void SharedMemoryBlock::read(SharedMemoryData &data) const {
-	data.hidratate(*ptrData);
+SharedMemoryBlock::~SharedMemoryBlock() {
+	// Destructor sin lanzamiento de excepciones
+	try {
+		freeResources();
+	}
+	catch(const SharedMemoryException &e) {
+	}
 }
 
 int SharedMemoryBlock::getAmountProcessesAttached() const {
-// todo genera excepciones?
 	shmid_ds state;
 	shmctl(shmId, IPC_STAT, &state);
 	return state.shm_nattch;

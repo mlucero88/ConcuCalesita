@@ -20,6 +20,18 @@ SharedMemoryException::SharedMemoryException(enum FunctionCode fnCode) throw() :
 	case ftok:
 		error_message.append("ftok() - ");
 		break;
+	case write_size:
+		error_message.append("write() - Not enough allocated memory");
+		return;
+	case write_lock:
+		error_message.append("write() - Locking of critical section failed - ");
+		break;
+	case read_invalid:
+		error_message.append("read() - No data to read from memory");
+		return;
+	case read_lock:
+		error_message.append("read() - Locking of critical section failed - ");
+		break;
 	}
 	error_message.append(strerror(errno));
 }

@@ -1,9 +1,9 @@
 #ifndef NOPOINTERDATA_H_
 #define NOPOINTERDATA_H_
 
-#include "Shared_Memory/SharedMemoryData.h"
+#include "Common/ByteStream.h"
 
-class NoPointerData: public SharedMemoryData {
+class NoPointerData {
 public:
 	NoPointerData();
 	NoPointerData(int entero, double real, char caracter);
@@ -17,8 +17,8 @@ public:
 	void hidratate(const ByteStream& stream);
 
 private:
-	int entero;
 	double real;
+	int entero;
 	char caracter;
 };
 

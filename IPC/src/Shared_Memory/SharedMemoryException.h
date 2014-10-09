@@ -13,7 +13,15 @@ class SharedMemoryException: public std::exception {
 public:
 
 	enum FunctionCode {
-		shmget, shmat, shmdt, shmctl, ftok
+		shmget,
+		shmat,
+		shmdt,
+		shmctl,
+		ftok,
+		write_size,
+		write_lock,
+		read_invalid,
+		read_lock
 	};
 
 	/**
