@@ -14,7 +14,7 @@ public:
 	char getCaracter() const;
 
 	const ByteStream serialize() const;
-	void hidratate(const ByteStream& stream);
+	bool hidratate(const ByteStream& stream);
 
 private:
 	double real;

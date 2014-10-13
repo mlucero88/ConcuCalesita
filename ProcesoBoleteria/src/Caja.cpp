@@ -1,17 +1,17 @@
 #include "Caja.h"
 #include <string>
 
-Caja::Caja(unsigned double saldoInicial) :
+Caja::Caja(double saldoInicial) :
 		saldo(saldoInicial) {
 }
 
 Caja::~Caja() {
 }
 
-void Caja::insertarDinero(unsigned double dinero) {
+void Caja::insertarDinero(double dinero) {
 	saldo += dinero;
 }
-void Caja::retirarDinero(unsigned double dinero) {
+void Caja::retirarDinero(double dinero) {
 	if (saldo >= dinero) {
 		saldo -= dinero;
 	}
@@ -20,6 +20,12 @@ void Caja::retirarDinero(unsigned double dinero) {
 	}
 }
 
-unsigned double Caja::consultarSaldo() const {
+double Caja::consultarSaldo() const {
 	return saldo;
+}
+
+const ByteStream Caja::serializar() const {
+	ByteStream stream(sizeof(saldo));
+	stream.insertarDatos(&saldo, sizeof(saldo));
+	return stream;
 }

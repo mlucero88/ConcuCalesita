@@ -37,11 +37,18 @@ const ByteStream NoPointerData::serialize() const {
 	return stream;
 }
 
-void NoPointerData::hidratate(const ByteStream& stream) {
-	const byte_t* data = stream.obtenerStream();
-	memcpy(&entero, data, sizeof(entero));
-	data += sizeof(entero);
-	memcpy(&real, data, sizeof(real));
-	data += sizeof(real);
-	memcpy(&caracter, data, sizeof(caracter));
+bool NoPointerData::hidratate(const ByteStream& stream) {
+	if (stream.getTamanioOcupado()
+			>= sizeof(entero) + sizeof(real) + sizeof(caracter)) {
+		const byte_t* data = stream.obtenerStream();
+		memcpy(&entero, data, sizeof(entero));
+		data += sizeof(entero);
+		memcpy(&real, data, sizeof(real));
+		data += sizeof(real);
+		memcpy(&caracter, data, sizeof(caracter));
+		return true;
+	}
+	else {
+		return false;
+	}
 }

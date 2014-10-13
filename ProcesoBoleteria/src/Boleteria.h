@@ -1,17 +1,24 @@
 #ifndef BOLETERIA_H_
 #define BOLETERIA_H_
 
+#include "Caja.h"
+
+class SharedMemoryBlock;
+
 class Boleteria {
 public:
-	Boleteria(unsigned double precioBoleto, unsigned cantidadBoletos);
+	Boleteria(double precioBoleto, unsigned cantidadBoletos);
 	~Boleteria();
 
-	void atenderNinio(const Ninio& ninio);
+//	void atenderNinio(const Ninio& ninio);
 
 private:
+	SharedMemoryBlock* memoriaCompartida;
 	Caja caja;
-	unsigned double precioBoleto;
+	double precioBoleto;
 	unsigned cantidadBoletos;
+
+	void actualizarSaldo();
 };
 
 #endif

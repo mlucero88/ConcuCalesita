@@ -22,7 +22,7 @@ int main() {
 	string archivo(ruta);
 	char caracter = 'M';
 
-#define ESCRIBE_EN_MEMORIA
+//#define ESCRIBE_EN_MEMORIA
 
 #ifdef ESCRIBE_EN_MEMORIA
 

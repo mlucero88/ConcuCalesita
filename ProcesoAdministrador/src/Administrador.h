@@ -1,19 +1,29 @@
 #ifndef ADMINISTRADOR_H_
 #define ADMINISTRADOR_H_
 
-#include <string>
+class SharedMemoryBlock;
 
 class Administrador {
 public:
+
 	Administrador();
 	~Administrador();
 
-	const std::string solicitarComando() const;
-	void interpretarComando(const std::string& comando) const;
+	void iniciar();
 
 private:
 
-	unsigned double consultarSaldo() const;
+	enum Opcion {
+		SALDO = 1, SALIR = 2
+	};
+
+	SharedMemoryBlock* memoriaCompartida;
+	bool finalizar;
+
+	void mostrarOpciones() const;
+	int solicitarOpcion() const;
+	void ejecutarOpcion(int opcion);
+	void consultarSaldo() const;
 };
 
 #endif
