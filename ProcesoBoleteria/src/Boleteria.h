@@ -1,5 +1,7 @@
 #ifndef BOLETERIA_H_
 #define BOLETERIA_H_
+#include "Ninio.h"
+#include "Caja.h"
 
 #include "Caja.h"
 

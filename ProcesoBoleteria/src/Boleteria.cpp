@@ -4,10 +4,13 @@
 #include <cstring>
 #include <iostream>
 
+<<<<<<< HEAD
 static const std::string nombreArchivo(
 		"/home/martin/Repositorios/ConcuCalesita/IPC_Test/src/IPC_Test.cpp");
 static const char caracter = 'M';
 
+=======
+>>>>>>> refs/remotes/origin/master
 Boleteria::Boleteria(double precioBoleto, unsigned cantidadBoletos) :
 		caja(), precioBoleto(precioBoleto), cantidadBoletos(cantidadBoletos) {
 	try {

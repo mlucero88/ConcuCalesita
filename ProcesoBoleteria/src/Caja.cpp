@@ -14,8 +14,7 @@ void Caja::insertarDinero(double dinero) {
 void Caja::retirarDinero(double dinero) {
 	if (saldo >= dinero) {
 		saldo -= dinero;
-	}
-	else {
+	} else {
 		throw std::string("Saldo Insuficiente");
 	}
 }
