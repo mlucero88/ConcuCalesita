@@ -16,33 +16,48 @@ using namespace std;
 /**
  *   Clase de Ninio.
  */
-class Ninio
-{
+class Ninio {
 public:
-    /**
-     *    Default constructor for class.
-     */
-	Ninio(string nombre){
+	/**
+	 *    Default constructor for class.
+	 */
+	Ninio(string nombre) {
 		this->nombre = nombre;
 		estado = COLA_BOLETERIA;
 		LOGGER->Log(this->nombre, this->estado);
 	}
 
-	void siguienteEstado(){
-		switch(estado){
+	void siguienteEstado() {
+		switch(estado) {
 			case (COLA_BOLETERIA): estado=COLA_CALESITA;
-				break;
+			break;
 			case (COLA_CALESITA): estado=EN_CALESITA;
-				break;
+			break;
 			case (EN_CALESITA): estado=COLA_SALIDA;
-				break;
+			break;
 			case (COLA_SALIDA): estado=SALIO;
-				break;
+			break;
 			case (SALIO):
-				break;
+			break;
 		}
 
 		LOGGER->Log(this->nombre, this->estado);
+	}
+
+	Estado getEstado() const {
+		return estado;
+	}
+
+	void setEstado(Estado estado) {
+		this->estado = estado;
+	}
+
+	const string& getNombre() const {
+		return nombre;
+	}
+
+	void setNombre(const string& nombre) {
+		this->nombre = nombre;
 	}
 
 private:
