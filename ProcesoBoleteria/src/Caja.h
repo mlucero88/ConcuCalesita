@@ -1,17 +1,17 @@
 #ifndef CAJA_H_
 #define CAJA_H_
-
+#include <iostream>
 class Caja {
 public:
-	Caja(unsigned double saldoInicial = 0);
+	Caja(double saldoInicial = 0);
 	~Caja();
 
-	void insertarDinero(unsigned double dinero);
-	void retirarDinero(unsigned double dinero);
-	unsigned double consultarSaldo() const;
+	void insertarDinero(double dinero);
+	void retirarDinero(double dinero);
+	double consultarSaldo() const;
 
 private:
-	unsigned double saldo;
+	double saldo;
 };
 
 #endif

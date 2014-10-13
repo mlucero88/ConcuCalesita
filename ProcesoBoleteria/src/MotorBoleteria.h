@@ -2,10 +2,11 @@
 #define MOTORBOLETERIA_H_
 
 #include <queue>
-
+#include "Ninio.h"
+#include "Boleteria.h"
 class MotorBoleteria {
 public:
-	MotorBoleteria(unsigned double precioBoleto, unsigned cantidadBoletos);
+	MotorBoleteria(double precioBoleto, unsigned cantidadBoletos);
 	~MotorBoleteria();
 
 	void encender();
@@ -13,7 +14,7 @@ public:
 
 private:
 	Boleteria boleteria;
-	std::queue< Ninio > colaBoleteria;
+	std::queue<Ninio> colaBoleteria;
 };
 
 #endif

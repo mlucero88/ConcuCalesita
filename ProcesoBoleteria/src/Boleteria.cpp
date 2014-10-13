@@ -1,6 +1,6 @@
 #include "Boleteria.h"
 
-Boleteria::Boleteria(unsigned double precioBoleto, unsigned cantidadBoletos) :
+Boleteria::Boleteria(double precioBoleto, unsigned cantidadBoletos) :
 		caja(), precioBoleto(precioBoleto), cantidadBoletos(cantidadBoletos) {
 }
 

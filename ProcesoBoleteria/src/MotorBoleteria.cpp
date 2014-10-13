@@ -1,6 +1,6 @@
 #include "MotorBoleteria.h"
 
-MotorBoleteria::MotorBoleteria(unsigned double precioBoleto,
+MotorBoleteria::MotorBoleteria(double precioBoleto,
 		unsigned cantidadBoletos) :
 		boleteria(precioBoleto, cantidadBoletos), colaBoleteria() {
 }
