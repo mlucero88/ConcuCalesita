@@ -2,11 +2,17 @@
 #include <fstream>
 
 Configuracion::Configuracion() :
-		precioBoleto("7.50"), capacidadCalesita("30"), duracionVuelta("35"),
+		precioBoleto("7.50"), capacidadCalesita("30"), duracionVuelta("15"),
 				cantNiniosGenerador("200") {
 	std::ifstream archivo(Paths::getConfigFilename().c_str());
 	if (archivo.is_open()) {
 		//todo leer campos precio, capacidad, duracion y cantidad generador
+		/* Un ejemplo del formato del archivo es este:
+		<precio_boleto> 7.50
+		<capacidad_calesita> 30
+		<duracion_vuelta_calesita> 15
+		<ninios_a_generar> 200
+		 */
 		archivo.close();
 	}
 	else {

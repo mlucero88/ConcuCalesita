@@ -15,7 +15,7 @@ int calcularRandom() {
 int main(int argc, char *argv[]) {
 	if (argc != 2) {
 		std::cout << "Usage: " << argv[0] << "<CANTIDAD_NINIOS>" << std::endl;
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	unsigned int cantidad = 0;
@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	else {
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	return 0;
 }

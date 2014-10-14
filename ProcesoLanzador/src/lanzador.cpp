@@ -63,22 +63,22 @@ int main(int argc, char* argv[]) {
 					<< strerror(errno) << std::endl;
 			exit(EXIT_FAILURE);
 		}
+
+		int status;
+		waitpid(generador, &status, 0);
+		std::cout << "Código de finalización del proceso generador: " << status
+				<< std::endl;
+		waitpid(calesita, &status, 0);
+		std::cout << "Código de finalización del proceso calesita: " << status
+				<< std::endl;
+		waitpid(boleteria, &status, 0);
+		std::cout << "Código de finalización del proceso boleteria: " << status
+				<< std::endl;
 	}
 	catch(std::string& e) {
 		std::cerr << e;
 		exit(EXIT_FAILURE);
 	}
-
-	int status;
-	waitpid(generador, &status, 0);
-	std::cout << "Código de finalización del proceso generador: " << status
-			<< std::endl;
-	waitpid(calesita, &status, 0);
-	std::cout << "Código de finalización del proceso calesita: " << status
-			<< std::endl;
-	waitpid(boleteria, &status, 0);
-	std::cout << "Código de finalización del proceso boleteria: " << status
-			<< std::endl;
 
 	return 0;
 }

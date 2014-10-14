@@ -5,11 +5,12 @@
 #include "Pipe/Serializador.h"
 #include <iostream>
 #include <sstream>
+#include <cstdlib>
 
 int main(int argc, char* argv[]) {
 	if (argc != 2) {
 		std::cerr << "Uso: " << argv[0] << " <precio_boleto>" << std::endl;
-		return 1;
+		exit (EXIT_FAILURE);
 	}
 	double precio = 0;
 	std::istringstream arg;
@@ -42,6 +43,7 @@ int main(int argc, char* argv[]) {
 	}
 	catch(std::string& e) {
 		std::cerr << e << std::endl;
+		exit (EXIT_FAILURE);
 	}
 	return 0;
 }
