@@ -1,0 +1,11 @@
+Esta es la idea que se me ocurre que tiene que ir el programa una vez instalado (por script o lo que sea que los genere):
+
+Concucalesita
+|
+|---/bin (aca van los ejecutables "boleteria", "calesita", "generador", "admin" y "lanzador")
+|
+|---/temp (aca van archivos temporales para los mecanismos ipc o lo que sea. seria bueno q el programa (el que lanza todo) los cree antes de los forks y los elimine al terminar los waits)
+|
+|---/log (archivos de log)
+|
+|---/conf (aca va el archivo "config" que es un texto donde se ponen los datos precioBoleto, cantidadBoletos, capacidadCalesita, duracionVuelta y cantidadNiniosAgenerar. Los lee la clase Configuracion)

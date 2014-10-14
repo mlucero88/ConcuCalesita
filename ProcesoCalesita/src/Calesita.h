@@ -1,6 +1,8 @@
 #ifndef CALESITA_H_
 #define CALESITA_H_
 
+#include "Ninio.h"
+
 class Calesita {
 public:
 	Calesita(unsigned capacidad, unsigned duracionVuelta);
@@ -9,13 +11,16 @@ public:
 	bool estaLlena() const;
 	bool estaVacia() const;
 	unsigned getDuracionVuelta() const;
-	void agregarNinio();
-	void quitarNinio();
+	void agregarNinio(const Ninio& ninio);
+	void vaciar();
 
 private:
-	// hay que ver si se implementa con "cantidadOcupada" (es decir, sin estar
-	// los ninios en el objeto), o haciendo una std::list de ninios
-	unsigned capacidad, cantidadOcupada, duracionVuelta;
+	Ninio** ubicaciones;
+	const unsigned capacidad, duracionVuelta;
+	unsigned cantidadOcupada;
+
+	bool estaOcupado(unsigned lugar) const;
+	unsigned encontrarLugarLibre() const;
 };
 
 #endif

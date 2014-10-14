@@ -1,27 +1,20 @@
 #include "Boleteria.h"
 #include "Shared_Memory/SharedMemoryBlock.h"
-#include <cstdlib>
-#include <cstring>
+#include "FilePaths.h"
 #include <iostream>
 
-<<<<<<< HEAD
-static const std::string nombreArchivo(
-		"/home/martin/Repositorios/ConcuCalesita/IPC_Test/src/IPC_Test.cpp");
-static const char caracter = 'M';
-
-=======
->>>>>>> refs/remotes/origin/master
-Boleteria::Boleteria(double precioBoleto, unsigned cantidadBoletos) :
-		caja(), precioBoleto(precioBoleto), cantidadBoletos(cantidadBoletos) {
+Boleteria::Boleteria(double precioBoleto) :
+		caja(), precioBoleto(precioBoleto) {
 	try {
-		memoriaCompartida = new SharedMemoryBlock(nombreArchivo, caracter,
-				sizeof(double));
+		memoriaCompartida = new SharedMemoryBlock(
+				Paths::getSharedMemoryFilename(),
+				Paths::getSharedMemoryCharacter(), sizeof(double));
 		actualizarSaldo();
 	}
 	catch(SharedMemoryException& e) {
-		std::cerr << "Error al crear la memoria compartida. " << e.what()
-				<< std::endl;
-		exit(EXIT_FAILURE);
+		std::string ex("Error al crear la memoria compartida. ");
+		ex.append(e.what());
+		throw ex;
 	}
 }
 
@@ -36,11 +29,12 @@ Boleteria::~Boleteria() {
 	delete memoriaCompartida;
 }
 
-//void Boleteria::atenderNinio(const Ninio& ninio) {
-//	// fijarse si ninio tiene dinero
-//	// darle boleto, decrementar cantidad de boletos en uno
-//	// agregar dinero a la caja
-//}
+void Boleteria::atenderNinio() {
+	// todo
+	// sacar ninio del fifo
+	caja.insertarDinero(precioBoleto);
+	// mandar ninio por el fifo a la calesita
+}
 
 void Boleteria::actualizarSaldo() {
 	memoriaCompartida->write(caja.serializar());

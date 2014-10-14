@@ -1,23 +1,21 @@
 #include "Administrador.h"
 #include "Shared_Memory/SharedMemoryBlock.h"
-#include <cstdlib>
-#include <cstring>
+#include "FilePaths.h"
 #include <iostream>
+#include <cstring>
 #include <sstream>
-
-static const std::string nombreArchivo(
-		"/home/martin/Repositorios/ConcuCalesita/IPC_Test/src/IPC_Test.cpp");
-static const char caracter = 'M';
 
 Administrador::Administrador() :
 		finalizar(false) {
 	try {
-		memoriaCompartida = new SharedMemoryBlock(nombreArchivo, caracter);
+		memoriaCompartida = new SharedMemoryBlock(
+				Paths::getSharedMemoryFilename(),
+				Paths::getSharedMemoryCharacter());
 	}
 	catch(SharedMemoryException& e) {
-		std::cerr << "Error al crear la memoria compartida. " << e.what()
-				<< std::endl;
-		exit(EXIT_FAILURE);
+		std::string ex("Error al crear la memoria compartida. ");
+		ex.append(e.what());
+		throw ex;
 	}
 }
 

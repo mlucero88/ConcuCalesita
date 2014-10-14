@@ -28,7 +28,5 @@
 *.app
 
 # Eclipse
-.cproject
-.project
 .settings/
 Debug/

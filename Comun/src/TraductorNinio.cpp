@@ -1,10 +1,3 @@
-/*
- * TraductorNinio.cpp
- *
- *  Created on: Oct 12, 2014
- *      Author: pable
- */
-
 #include "TraductorNinio.h"
 #include <stdexcept>
 #include <jsoncpp/json/writer.h>
@@ -12,12 +5,9 @@
 
 const std::string TraductorNinio::NOMBRES[] = { "nombre", "estado" };
 TraductorNinio::TraductorNinio() {
-	// TODO Auto-generated constructor stub
-
 }
 
 TraductorNinio::~TraductorNinio() {
-	// TODO Auto-generated destructor stub
 }
 
 std::string TraductorNinio::toJson(const Ninio& obj) {
