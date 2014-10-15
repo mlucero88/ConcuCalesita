@@ -6,13 +6,18 @@
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
+#include <Seniales/PipeSignalHandler.h>
+#include <Seniales/SignalHandler.h>
 
 int main(int argc, char* argv[]) {
 	if (argc != 3) {
-		std::cerr << "Uso: " << argv[0]
-				<< " <precio_boleto> <cant_ninios_a_atender>" << std::endl;
+		std::cerr << "Uso: " << argv[0] << " <precio_boleto> <cant_ninios_a_atender>" << std::endl;
 		exit(EXIT_FAILURE);
 	}
+
+	PipeSignalHandler handler;
+	SignalHandler::getInstance()->registrarHandler(SIGPIPE, &handler);
+	int exitState = EXIT_SUCCESS;
 	double precio = 0;
 	std::istringstream arg;
 	arg.str(std::string(argv[1]));
@@ -28,24 +33,15 @@ int main(int argc, char* argv[]) {
 			++count;
 		}
 
-		/*
-		 TraductorNinio traductor;
-		 Deserializador< Ninio > deserializador(traductor, "/tmp/COLA_BOLETERIA");
-		 //Serializador<Ninio> serializador(traductor, "/tmp/COLA_CALESITA");
-		 for (unsigned int i = 0; i < cantidadBoletos; i++) {
-		 Ninio ninio = deserializador.deserializar();
-		 ninio.siguienteEstado();
-		 LOGGER->Log("BOLETERIA: Recibido ninio: " + ninio.getNombre() + " en la Boleteria.");
-		 LOGGER->Log("BOLETERIA: Atendiendo ninio: " + ninio.getNombre());
-		 boleteria.atenderNinio(ninio);
-		 //serializador.serializar(ninio);
-		 LOGGER->Log("BOLETERIA: Ninio: " + ninio.getNombre() + " en la cola de la Calesita");
-		 }
-		 */
-	}
-	catch(std::string& e) {
+	} catch (std::string& e) {
 		std::cerr << e << std::endl;
-		exit(EXIT_FAILURE);
+		exitState = EXIT_FAILURE;
+	} catch (std::exception& e) {
+		//Porque puede haber roto el/los pipe/s en la boleteria
+		std::cerr << e.what() << std::endl;
 	}
-	return 0;
+	SignalHandler::getInstance()->removerHandler(SIGPIPE);
+	SignalHandler::getInstance()->destruir();
+
+	exit(exitState);
 }

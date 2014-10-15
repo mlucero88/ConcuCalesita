@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Pipe/Serializador.h"
 #include "TraductorNinio.h"
 #include "Logger.h"
@@ -5,6 +6,10 @@
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
+#include <FilePaths.h>
+#include <signal.h>
+#include <Seniales/PipeSignalHandler.h>
+#include <Seniales/SignalHandler.h>
 
 int calcularRandom() {
 	srand(time(NULL));
@@ -17,6 +22,9 @@ int main(int argc, char *argv[]) {
 		std::cout << "Usage: " << argv[0] << "<CANTIDAD_NINIOS>" << std::endl;
 		exit(EXIT_FAILURE);
 	}
+	PipeSignalHandler handler;
+	SignalHandler::getInstance()->registrarHandler(SIGPIPE, &handler);
+	int exitState = EXIT_SUCCESS;
 
 	unsigned int cantidad = 0;
 	std::stringstream ss(argv[1]);
@@ -25,29 +33,33 @@ int main(int argc, char *argv[]) {
 	ss >> cantidad;
 	ss << cantidad;
 	std::string str(ss.str());
+	try {
+		if (cantidad != 0) {
+			LOGGER->Log("GENERADOR: Generando " + str + " ninios");
+			TraductorNinio traductor;
+			Serializador< Ninio > serializador(traductor, Paths::getFifoGeneradorBoleteriaFilename());
 
-	if (cantidad != 0) {
-		LOGGER->Log("GENERADOR: Generando " + str + " ninios");
-		TraductorNinio traductor;
-		Serializador< Ninio > serializador(traductor, "/tmp/COLA_BOLETERIA");
+			for (unsigned int i = 0; i < cantidad; i++) {
+				ss << i;
+				str = ss.str();
+				Ninio ninio("Ninio " + str);
+				LOGGER->Log("GENERADOR: Creado ninio: " + ninio.getNombre());
+				ninio.setEstado(COLA_BOLETERIA);
+				serializador.serializar(ninio);
+				LOGGER->Log(
+						"GENERADOR: ninio: " + ninio.getNombre()
+						+ " en la cola de la Boleteria.");
 
-		for (unsigned int i = 0; i < cantidad; i++) {
-			ss << i;
-			str = ss.str();
-			Ninio ninio("Ninio " + str);
-			LOGGER->Log("GENERADOR: Creado ninio: " + ninio.getNombre());
-			ninio.setEstado(COLA_BOLETERIA);
-			serializador.serializar(ninio);
-			LOGGER->Log(
-					"GENERADOR: ninio: " + ninio.getNombre()
-					+ " en la cola de la Boleteria.");
-
-			//Sleep para simular el tiempo entre ninio y ninio.
-			sleep(calcularRandom());
+				//Sleep para simular el tiempo entre ninio y ninio.
+				sleep(calcularRandom());
+			}
+		} else {
+			exitState=EXIT_FAILURE;
 		}
+	} catch(std::exception& ex) {
+		std::cerr << ex.what() << std::endl;
 	}
-	else {
-		exit(EXIT_FAILURE);
-	}
-	return 0;
+	SignalHandler::getInstance()->removerHandler(SIGPIPE);
+	SignalHandler::getInstance()->destruir();
+	exit(exitState);
 }
