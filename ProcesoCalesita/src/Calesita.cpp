@@ -31,9 +31,11 @@ void Calesita::agregarNinio(const Ninio& ninio) {
 	if (!estaLlena()) {
 		unsigned ubicacion = ninio.getUbicacionPreferida(capacidad);
 		if (estaOcupado(ubicacion)) {
+			// todo loguear que intento sentarse en su ubicacion preferida y estaba ocupada
 			ubicacion = encontrarLugarLibre();
 		}
 		ubicaciones[ubicacion] = new Ninio(ninio);
+		// todo loguear que se sento en la ubicacion "ubicacion"
 		++cantidadOcupada;
 	}
 	else {
@@ -42,13 +44,17 @@ void Calesita::agregarNinio(const Ninio& ninio) {
 }
 
 void Calesita::vaciar() {
-	for (unsigned int i = 0; i < capacidad; ++i) {
-		if (ubicaciones[i] != NULL) {
-			delete ubicaciones[i];
-			ubicaciones[i] = NULL;
+	if (!estaVacia()) {
+		for (unsigned int i = 0; i < capacidad; ++i) {
+			if (ubicaciones[i] != NULL) {
+				// todo loguear que el ninio salio de la calesita
+				// el pibe se obtiene asi: ubicaciones[i] (esto retorna un Ninio*)
+				delete ubicaciones[i];
+				ubicaciones[i] = NULL;
+			}
 		}
+		cantidadOcupada = 0;
 	}
-	cantidadOcupada = 0;
 }
 
 bool Calesita::estaOcupado(unsigned lugar) const {

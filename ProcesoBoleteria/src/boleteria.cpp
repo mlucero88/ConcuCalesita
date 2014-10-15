@@ -1,17 +1,14 @@
 #include "Boleteria.h"
-#include "Logger.h"
-#include "TraductorNinio.h"
-#include "Pipe/Deserializador.h"
-#include "Pipe/Serializador.h"
+#include "Seniales/PipeSignalHandler.h"
+#include "Seniales/SignalHandler.h"
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
-#include <Seniales/PipeSignalHandler.h>
-#include <Seniales/SignalHandler.h>
 
 int main(int argc, char* argv[]) {
 	if (argc != 3) {
-		std::cerr << "Uso: " << argv[0] << " <precio_boleto> <cant_ninios_a_atender>" << std::endl;
+		std::cerr << "Uso: " << argv[0]
+				<< " <precio_boleto> <cant_ninios_a_atender>" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -33,10 +30,12 @@ int main(int argc, char* argv[]) {
 			++count;
 		}
 
-	} catch (std::string& e) {
+	}
+	catch(std::string& e) {
 		std::cerr << e << std::endl;
 		exitState = EXIT_FAILURE;
-	} catch (std::exception& e) {
+	}
+	catch(std::exception& e) {
 		//Porque puede haber roto el/los pipe/s en la boleteria
 		std::cerr << e.what() << std::endl;
 	}

@@ -4,10 +4,9 @@
 #include "Ninio.h"
 #include "Caja.h"
 #include "TraductorNinio.h"
-
 #include "Pipe/Serializador.h"
-
 #include "Pipe/Deserializador.h"
+
 class SharedMemoryBlock;
 
 class Boleteria {
@@ -19,13 +18,13 @@ public:
 
 private:
 	SharedMemoryBlock* memoriaCompartida;
+	TraductorNinio traductor;
+	Serializador< Ninio > serializadorCalesita;
+	Deserializador< Ninio > deserializadorGenerador;
 	Caja caja;
 	double precioBoleto;
+
 	void actualizarSaldo();
-	/*IPC*/
-	TraductorNinio traductor;
-	Serializador<Ninio> serializadorCalesita;
-	Deserializador<Ninio> deserializadorGenerador;
 };
 
 #endif

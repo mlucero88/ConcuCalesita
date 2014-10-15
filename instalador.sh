@@ -72,9 +72,10 @@ g++ -L"${PATH_PROYECTOS}/IPC" -L"${PATH_PROYECTOS}/Comun" -o "${RUTA_RAIZ}/bin/b
 mkdir -p "${PATH_PROYECTOS}/ProcesoCalesita/obj"
 
 g++ -O2 -c -I"${PATH_PROYECTOS}/IPC/src" -I"${PATH_PROYECTOS}/Comun/src" "${PATH_PROYECTOS}/ProcesoCalesita/src/Calesita.cpp" -o "${PATH_PROYECTOS}/ProcesoCalesita/obj/Calesita.o"
+g++ -O2 -c -I"${PATH_PROYECTOS}/IPC/src" -I"${PATH_PROYECTOS}/Comun/src" "${PATH_PROYECTOS}/ProcesoCalesita/src/MotorCalesita.cpp" -o "${PATH_PROYECTOS}/ProcesoCalesita/obj/MotorCalesita.o"
 g++ -O2 -c -I"${PATH_PROYECTOS}/IPC/src" -I"${PATH_PROYECTOS}/Comun/src" "${PATH_PROYECTOS}/ProcesoCalesita/src/calesita.cpp" -o "${PATH_PROYECTOS}/ProcesoCalesita/obj/calesita.o"
 
-g++ -L"${PATH_PROYECTOS}/IPC" -L"${PATH_PROYECTOS}/Comun" -o "${RUTA_RAIZ}/bin/calesita"  "${PATH_PROYECTOS}/ProcesoCalesita/obj/Calesita.o" "${PATH_PROYECTOS}/ProcesoCalesita/obj/calesita.o" -lComun -ljsoncpp -lIPC
+g++ -L"${PATH_PROYECTOS}/IPC" -L"${PATH_PROYECTOS}/Comun" -o "${RUTA_RAIZ}/bin/calesita"  "${PATH_PROYECTOS}/ProcesoCalesita/obj/Calesita.o" "${PATH_PROYECTOS}/ProcesoCalesita/obj/MotorCalesita.o" "${PATH_PROYECTOS}/ProcesoCalesita/obj/calesita.o" -lComun -ljsoncpp -lIPC
 
 #Compilacion Generador
 mkdir -p "${PATH_PROYECTOS}/ProcesoGenerador/obj"
