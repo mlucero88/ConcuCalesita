@@ -1,0 +1,25 @@
+ConcuCalesita
+
+Para instalar la aplicación, correr el script "instalador.sh" pasándole el directorio donde se desea instalar (el directorio debe existir). Dentro de este directorio se creará el directorio "Concucalesita" con la siguiente estructura:
+
+Concucalesita
+|
+|---/bin
+|
+|---/temp
+|
+|---/log
+|
+|---/conf
+
+
+CONFIGURACIÓN:
+Puede cambiar los valores del precio del boleto, capacidad y duración de la vuelta de la calesita o la cantidad de niños a generar desde el archivo "Concucalesita/conf/config". La aplicación viene con valores por defecto. Los cambios se reflejarán en la siguiente ejecución del programa. Por favor no cambiar el formato de los campos del archivo.
+
+EJECUCIÓN:
+Para iniciar el programa, ejecutar el binario "Concucalesita/bin/lanzador". El lanzador iniciará el generador, la boletería y la calesita con los valores del archivo de configuración.
+Para iniciar el administrador, ejecutar el binario "Concucalesita/bin/admin". Para que el administrador pueda acceder a la caja, debe estar el proceso boletería en ejecución (creado por el lanzador).
+Los binarios "boleteria", "generador" y "calesita" no deben iniciarse a mano por el usuario.
+
+LOG:
+Puede consultar los archivos de log en la carpeta "Concucalesita/log" para revisar el camino seguido por los niños.
