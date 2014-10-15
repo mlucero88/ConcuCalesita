@@ -21,6 +21,16 @@ public:
 		return std::string(dirname(dirname(buffer)));
 	}
 
+	// Pablo, fijate si te sirve
+	static std::string getFifoGeneradorBoleteriaFilename() {
+		return std::string(getProgramDirectory().append("/temp/fifo_gen_bol"));
+	}
+
+	// Pablo, fijate si te sirve
+	static std::string getFifoBoleteriaCalesitaFilename() {
+		return std::string(getProgramDirectory().append("/temp/fifo_bol_cal"));
+	}
+
 	static std::string getSharedMemoryFilename() {
 		return std::string(getProgramDirectory().append("/temp/shared_memory"));
 	}

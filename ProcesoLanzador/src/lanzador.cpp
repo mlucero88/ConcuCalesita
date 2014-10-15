@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
 		if (boleteria == 0) {
 			int ret = execl(Paths::getBinBoleteria().c_str(),
 					Paths::getBinBoleteria().c_str(), conf.getPrecioBoleto(),
-					(char*) NULL);
+					conf.getCantidadNiniosGenerador(), (char*) NULL);
 			if (ret == -1) {
 				std::cerr << "Error al ejecutar el proceso boleteria (exec). "
 						<< strerror(errno) << std::endl;

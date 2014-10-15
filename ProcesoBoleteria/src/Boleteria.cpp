@@ -32,6 +32,7 @@ Boleteria::~Boleteria() {
 void Boleteria::atenderNinio() {
 	// todo
 	// sacar ninio del fifo
+	// loguear que compro boleto
 	caja.insertarDinero(precioBoleto);
 	// mandar ninio por el fifo a la calesita
 }
