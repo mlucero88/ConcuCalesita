@@ -25,6 +25,8 @@ mkdir -p "${RUTA_RAIZ}/log"
 mkdir -p "${RUTA_RAIZ}/conf"
 
 echo "archivo temporal para memoria compartida" > "${RUTA_RAIZ}/temp/shared_memory"
+echo "archivo temporal para fifo entre generador y boleteria" > "${RUTA_RAIZ}/temp/fifo_gen_bol"
+echo "archivo temporal para fifo entre boleteria y calesita" > "${RUTA_RAIZ}/temp/fifo_bol_cal"
 
 echo "<precio_boleto> 7.50" > "${RUTA_RAIZ}/conf/config"
 echo "<capacidad_calesita> 30" >> "${RUTA_RAIZ}/conf/config"
