@@ -1,7 +1,11 @@
 #include "Logger.h"
+#include "UnifiedLogger.h"
+#include <unistd.h>
+
 #include "FilePaths.h"
 #include <cstdarg>
 #include <ctime>
+#include <sstream>
 
 // Get current date/time, format is YYYY-MM-DD.HH:mm:ss
 const std::string currentDateTime() {
@@ -15,7 +19,7 @@ const std::string currentDateTime() {
 }
 
 // Get current date, format is YYYYMMDD
-const std::string logName() {
+const std::string Logger::logName(bool unified) {
 	/* todo: El problema de poner hora es que cada proceso pone su hora cuando
 	 * llama por primera vez a este metodo */
 //	time_t now = time(0);
@@ -25,7 +29,16 @@ const std::string logName() {
 //	std::string filename(Paths::getLogFolder() + "Calesita_%Y%m%d.log");
 //	strftime(buf, sizeof(buf), filename.c_str(), &tstruct);
 //	return buf;
-	return std::string(Paths::getLogFolder() + "concucalesita.log");
+	//return std::string(Paths::getLogFolder() + "concucalesita.log");
+	if (!unified) {
+		std::stringstream ss;
+		std::string pid;
+		ss << getpid();
+		ss >> pid;
+		return std::string("/tmp/concucalesita.") + pid + ".log";
+	} else {
+		return std::string("/tmp/concucalesita.log");
+	}
 }
 
 void Logger::Log(const std::string& nombre, Estado estado) {
@@ -55,15 +68,19 @@ Logger& Logger::operator<<(const std::string& sMessage) {
 	return *this;
 }
 
-Logger* Logger::getLogger() {
+Logger* Logger::getLogger(bool unified) {
 	if (m_pThis == NULL) {
-		m_pThis = new Logger();
-		m_Logfile.open(logName().c_str(), std::ios::out | std::ios::app);
+		if (!unified) {
+			m_pThis = new Logger(logName(unified));
+		} else {
+			m_pThis = new UnifiedLoggerLogger(logName(unified));
+		}
 	}
 	return m_pThis;
 }
 
-Logger::Logger() {
+Logger::Logger(const std::string& name) {
+	m_Logfile.open(name.c_str(), std::ios::out | std::ios::app);
 }
 
 Logger::Logger(const Logger&) {
@@ -90,5 +107,9 @@ std::string Logger::enumToString(Estado enumVal) {
 	}
 }
 
+Logger::~Logger() {
+	m_Logfile.close();
+}
+
 Logger* Logger::m_pThis = NULL;
-std::ofstream Logger::m_Logfile;
+//std::ofstream Logger::m_Logfile;

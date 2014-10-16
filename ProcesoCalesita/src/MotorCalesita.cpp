@@ -4,9 +4,7 @@
 #include <unistd.h>
 
 MotorCalesita::MotorCalesita(unsigned capacidad, unsigned duracionVuelta) :
-		calesita(capacidad, duracionVuelta), traductor(),
-				deserializadorBoleteria(traductor,
-						Paths::getFifoBoleteriaCalesitaFilename()) {
+		calesita(capacidad, duracionVuelta), traductor(), deserializadorBoleteria(traductor, Paths::getFifoBoleteriaCalesitaFilename()) {
 }
 
 MotorCalesita::~MotorCalesita() {
@@ -21,9 +19,9 @@ void MotorCalesita::subirNinios() {
 }
 
 void MotorCalesita::encenderCalesita() const {
-	LOGGER->Log("CALESITA: comienza la vuelta");
+	Logger::getLogger()->Log("CALESITA: comienza la vuelta");
 	sleep(calesita.getDuracionVuelta());
-	LOGGER->Log("CALESITA: finaliza la vuelta");
+	Logger::getLogger()->Log("CALESITA: finaliza la vuelta");
 }
 
 void MotorCalesita::bajarNinios() {

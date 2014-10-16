@@ -5,33 +5,23 @@
 #include <iostream>
 
 Boleteria::Boleteria(double precioBoleto) :
-		traductor(),
-				serializadorCalesita(traductor,
-						Paths::getFifoBoleteriaCalesitaFilename()),
-				deserializadorGenerador(traductor,
-						Paths::getFifoGeneradorBoleteriaFilename()), caja(),
-				precioBoleto(precioBoleto) {
+		traductor(), deserializadorGenerador(traductor, Paths::getFifoGeneradorBoleteriaFilename()), serializadorCalesita(traductor, Paths::getFifoBoleteriaCalesitaFilename()), caja(), precioBoleto(precioBoleto) {
 	try {
-		memoriaCompartida = new SharedMemoryBlock(
-				Paths::getSharedMemoryFilename(),
-				Paths::getSharedMemoryCharacter(), sizeof(double));
+		memoriaCompartida = new SharedMemoryBlock(Paths::getSharedMemoryFilename(), Paths::getSharedMemoryCharacter(), sizeof(double));
 		actualizarSaldo();
-	}
-	catch(SharedMemoryException& e) {
+	} catch (SharedMemoryException& e) {
 		std::string ex("Error al crear la memoria compartida. ");
 		ex.append(e.what());
 		throw ex;
 	}
-	LOGGER->Log("BOLETERIA ABIERTA");
+	Logger::getLogger()->Log("BOLETERIA ABIERTA");
 }
 
 Boleteria::~Boleteria() {
 	try {
 		memoriaCompartida->freeResources();
-	}
-	catch(SharedMemoryException &e) {
-		std::cerr << "Error al liberar la memoria compartida. " << e.what()
-				<< std::endl;
+	} catch (SharedMemoryException &e) {
+		std::cerr << "Error al liberar la memoria compartida. " << e.what() << std::endl;
 	}
 	delete memoriaCompartida;
 	LOGGER->Log("BOLETERIA CERRADA");
@@ -49,4 +39,8 @@ void Boleteria::atenderNinio() {
 
 void Boleteria::actualizarSaldo() {
 	memoriaCompartida->write(caja.serializar());
+}
+
+void Boleteria::closePipe() {
+	serializadorCalesita.cerrar();
 }

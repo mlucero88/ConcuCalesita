@@ -12,6 +12,9 @@ class SharedMemoryBlock;
 class Boleteria {
 public:
 	Boleteria(double precioBoleto);
+
+	void closePipe();
+
 	~Boleteria();
 
 	void atenderNinio();
@@ -19,8 +22,8 @@ public:
 private:
 	SharedMemoryBlock* memoriaCompartida;
 	TraductorNinio traductor;
-	Serializador< Ninio > serializadorCalesita;
-	Deserializador< Ninio > deserializadorGenerador;
+	Deserializador<Ninio> deserializadorGenerador;
+	Serializador<Ninio> serializadorCalesita;
 	Caja caja;
 	double precioBoleto;
 

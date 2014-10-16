@@ -19,9 +19,13 @@
 template<class T>
 class Serializador {
 public:
-	explicit Serializador(ITraductor<T>& traductor, std::string fifo) :
+	explicit Serializador(ITraductor<T>& traductor, const std::string& fifo) :
 			traductor(traductor), fifoEscritura(fifo) {
 		fifoEscritura.abrir();
+	}
+
+	void cerrar() {
+		fifoEscritura.cerrar();
 	}
 
 	virtual ~Serializador() {

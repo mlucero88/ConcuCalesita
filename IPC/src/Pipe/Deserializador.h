@@ -15,7 +15,7 @@
 template<class T>
 class Deserializador {
 public:
-	Deserializador(ITraductor<T>& traductor, std::string fifo) :
+	Deserializador(ITraductor<T>& traductor, const std::string& fifo) :
 			traductor(traductor), fifoLectura(fifo) {
 		fifoLectura.abrir();
 	}

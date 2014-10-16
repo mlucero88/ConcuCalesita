@@ -59,6 +59,10 @@ public:
 		return std::string(getProgramDirectory().append("/bin/generador"));
 	}
 
+	static std::string getLoggerLockFile() {
+			return std::string(getProgramDirectory().append("/tmp/lock_file"));
+		}
+
 private:
 	static const int buffSize = 1024;
 	Paths();

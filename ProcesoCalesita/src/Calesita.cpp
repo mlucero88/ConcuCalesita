@@ -34,19 +34,19 @@ void Calesita::agregarNinio(const Ninio& ninio) {
 		char buffer[50];
 		sprintf(buffer, "%d", ubicacion);
 		if (estaOcupado(ubicacion)) {
-			LOGGER->Log("CALESITA: El ninio  " + ninio.getNombre() + " intento"
+			Logger::getLogger()->Log("CALESITA: El ninio  " + ninio.getNombre() + " intento"
 					" subirse a la ubicacion " + buffer + " "
 					"y estaba ocupada");
 			ubicacion = encontrarLugarLibre();
 			sprintf(buffer, "%d", ubicacion);
 		}
 		ubicaciones[ubicacion] = new Ninio(ninio);
-		LOGGER->Log("CALESITA: El ninio  " + ninio.getNombre() + " se subio a"
+		Logger::getLogger()->Log("CALESITA: El ninio  " + ninio.getNombre() + " se subio a"
 				" la ubicacion " + buffer);
 		++cantidadOcupada;
 	}
 	else {
-		LOGGER->Log("CALESITA: El ninio  " + ninio.getNombre() + " no se pudo"
+		Logger::getLogger()->Log("CALESITA: El ninio  " + ninio.getNombre() + " no se pudo"
 				" ubicar en la calesita. Calesita Llena");
 		throw std::string("Calesita Llena");
 	}
