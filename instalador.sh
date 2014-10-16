@@ -23,13 +23,11 @@ mkdir -p "${RUTA_RAIZ}/conf"
 
 echo "archivo temporal para memoria compartida" > "${RUTA_RAIZ}/tmp/shared_memory"
 echo "archivo temporal para lockear el logger" > "${RUTA_RAIZ}/tmp/lock_file"
-echo "archivo temporal para fifo entre generador y boleteria" > "${RUTA_RAIZ}/tmp/fifo_gen_bol"
-echo "archivo temporal para fifo entre boleteria y calesita" > "${RUTA_RAIZ}/tmp/fifo_bol_cal"
 
-echo "<precio_boleto> 7.50" > "${RUTA_RAIZ}/conf/config"
-echo "<capacidad_calesita> 10" >> "${RUTA_RAIZ}/conf/config"
-echo "<duracion_vuelta_calesita> 15" >> "${RUTA_RAIZ}/conf/config"
-echo "<ninios_a_generar> 100" >> "${RUTA_RAIZ}/conf/config"
+echo "<precio_boleto> 5.50" > "${RUTA_RAIZ}/conf/config"
+echo "<capacidad_calesita> 3" >> "${RUTA_RAIZ}/conf/config"
+echo "<duracion_vuelta_calesita> 2" >> "${RUTA_RAIZ}/conf/config"
+echo "<ninios_a_generar> 6" >> "${RUTA_RAIZ}/conf/config"
 
 PATH_PROYECTOS="$(dirname "$0")"
 

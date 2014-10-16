@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
+	LOGGER.log("PROCESO GENERADOR INICIADO");
 	PipeSignalHandler handler;
 	SignalHandler::getInstance()->registrarHandler(SIGPIPE, &handler);
 	int exitState = EXIT_SUCCESS;
@@ -33,7 +34,6 @@ int main(int argc, char *argv[]) {
 	ss >> cantidad;
 	ss << cantidad;
 	std::string str(ss.str());
-	LOGGER.log("PROCESO GENERADOR INICIADO");
 	try {
 		if (cantidad > 0) {
 			LOGGER.log(std::string("GENERADOR: Generando " + str + " ninios"));
@@ -46,8 +46,8 @@ int main(int argc, char *argv[]) {
 				str = indice.str();
 				Ninio ninio("Ninio " + str);
 				LOGGER.log(std::string("GENERADOR: Se creo " + ninio.getNombre()));
-				serializador.serializar(ninio);
 				ninio.siguienteEstado();
+				serializador.serializar(ninio);
 
 				//Sleep para simular el tiempo entre ninio y ninio.
 				sleep(calcularRandom());

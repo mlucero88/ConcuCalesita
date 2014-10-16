@@ -25,6 +25,7 @@ void Logger::log(const std::string& nombre, Estado estado) {
 		m_Logfile << "\n" << currentDateTime() << ":\t";
 		m_Logfile << nombre << ":\t";
 		m_Logfile << enumToString(estado);
+		m_Logfile.flush();
 		lock.releaseLock();
 	}
 	catch(const LockException &e) {
@@ -41,6 +42,7 @@ void Logger::log(const std::string& sMessage) {
 		lock.seizeExclusiveLock();
 		m_Logfile << "\n" << currentDateTime() << ":\t";
 		m_Logfile << sMessage;
+		m_Logfile.flush();
 		lock.releaseLock();
 	}
 	catch(const LockException &e) {

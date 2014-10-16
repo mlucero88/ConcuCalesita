@@ -43,8 +43,8 @@ void Boleteria::atenderNinio() {
 	ninio.siguienteEstado();
 	caja.insertarDinero(precioBoleto);
 	// Manda ninio por el fifo a la calesita
-	serializadorCalesita.serializar(ninio);
 	ninio.siguienteEstado();
+	serializadorCalesita.serializar(ninio);
 }
 
 void Boleteria::actualizarSaldo() {
