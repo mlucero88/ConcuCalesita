@@ -44,7 +44,7 @@ size_t SharedMemoryBlock::write(const ByteStream& data) {
 		memcpy(ptrData + sizeof(size_t), data.obtenerStream(), dataSize);
 		lock.releaseLock();
 	}
-	catch(LockException &e) {
+	catch(const LockException &e) {
 		throw SharedMemoryException(SharedMemoryException::write_lock);
 	}
 	return dataSize;
@@ -61,7 +61,7 @@ size_t SharedMemoryBlock::read(ByteStream& data) const {
 		lock.releaseLock();
 		data.asignarStream(buffer, dataSize);
 	}
-	catch(LockException &e) {
+	catch(const LockException &e) {
 		delete[] buffer;
 		throw SharedMemoryException(SharedMemoryException::read_lock);
 	}

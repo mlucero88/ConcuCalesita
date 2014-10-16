@@ -18,7 +18,7 @@ int calcularRandom() {
 
 int main(int argc, char *argv[]) {
 	if (argc != 3) {
-		std::cout << "Usage: " << argv[0] << "<CANTIDAD_NINIOS> <LOG_UNIFICADO (0/1)>" << std::endl;
+		std::cout << "Usage: " << argv[0] << " <CANTIDAD_NINIOS> <LOG_UNIFICADO (0/1)>" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
 		} else {
 			exitState = EXIT_FAILURE;
 		}
-	} catch (std::exception& ex) {
+	} catch (const std::exception& ex) {
 		std::cerr << ex.what() << std::endl;
 	}
 	SignalHandler::getInstance()->removerHandler(SIGPIPE);

@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
 			motorCalesita.encenderCalesita();
 			motorCalesita.bajarNinios();
 		}
-	} catch (std::exception& e) {
+	} catch (const std::exception& e) {
 		std::cerr << e.what() << std::endl;
 	}
 	SignalHandler::getInstance()->removerHandler(SIGPIPE);

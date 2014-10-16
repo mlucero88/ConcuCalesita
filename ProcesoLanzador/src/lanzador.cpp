@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
 		std::cout << "Código de finalización del proceso boleteria: " << status
 				<< std::endl;
 	}
-	catch(std::string& e) {
+	catch(const std::string& e) {
 		std::cerr << e;
 		exit(EXIT_FAILURE);
 	}

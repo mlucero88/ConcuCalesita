@@ -21,18 +21,20 @@ public:
 		return std::string(dirname(dirname(buffer)));
 	}
 
-	// Pablo, fijate si te sirve
 	static std::string getFifoGeneradorBoleteriaFilename() {
 		return std::string(getProgramDirectory().append("/temp/fifo_gen_bol"));
 	}
 
-	// Pablo, fijate si te sirve
 	static std::string getFifoBoleteriaCalesitaFilename() {
 		return std::string(getProgramDirectory().append("/temp/fifo_bol_cal"));
 	}
 
 	static std::string getSharedMemoryFilename() {
 		return std::string(getProgramDirectory().append("/temp/shared_memory"));
+	}
+
+	static std::string getLoggerLockFile() {
+		return std::string(getProgramDirectory().append("/tmp/lock_file"));
 	}
 
 	static char getSharedMemoryCharacter() {
@@ -58,10 +60,6 @@ public:
 	static std::string getBinGenerador() {
 		return std::string(getProgramDirectory().append("/bin/generador"));
 	}
-
-	static std::string getLoggerLockFile() {
-			return std::string(getProgramDirectory().append("/tmp/lock_file"));
-		}
 
 private:
 	static const int buffSize = 1024;

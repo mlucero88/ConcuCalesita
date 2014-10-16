@@ -12,7 +12,7 @@ Administrador::Administrador() :
 				Paths::getSharedMemoryFilename(),
 				Paths::getSharedMemoryCharacter());
 	}
-	catch(SharedMemoryException& e) {
+	catch(const SharedMemoryException& e) {
 		std::string ex("Error al crear la memoria compartida. ");
 		ex.append(e.what());
 		throw ex;
@@ -23,7 +23,7 @@ Administrador::~Administrador() {
 	try {
 		memoriaCompartida->freeResources();
 	}
-	catch(SharedMemoryException &e) {
+	catch(const SharedMemoryException &e) {
 		std::cerr << "Error al liberar la memoria compartida. " << e.what()
 				<< std::endl;
 	}

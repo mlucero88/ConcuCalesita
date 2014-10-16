@@ -22,13 +22,14 @@ mkdir -p "${RUTA_RAIZ}/log"
 mkdir -p "${RUTA_RAIZ}/conf"
 
 echo "archivo temporal para memoria compartida" > "${RUTA_RAIZ}/temp/shared_memory"
+echo "archivo temporal para lockear el logger" > "${RUTA_RAIZ}/temp/lock_file"
 echo "archivo temporal para fifo entre generador y boleteria" > "${RUTA_RAIZ}/temp/fifo_gen_bol"
 echo "archivo temporal para fifo entre boleteria y calesita" > "${RUTA_RAIZ}/temp/fifo_bol_cal"
 
 echo "<precio_boleto> 7.50" > "${RUTA_RAIZ}/conf/config"
-echo "<capacidad_calesita> 30" >> "${RUTA_RAIZ}/conf/config"
+echo "<capacidad_calesita> 10" >> "${RUTA_RAIZ}/conf/config"
 echo "<duracion_vuelta_calesita> 15" >> "${RUTA_RAIZ}/conf/config"
-echo "<ninios_a_generar> 200" >> "${RUTA_RAIZ}/conf/config"
+echo "<ninios_a_generar> 100" >> "${RUTA_RAIZ}/conf/config"
 
 PATH_PROYECTOS="$(dirname "$0")"
 
@@ -47,13 +48,14 @@ g++ -O2 -c "${PATH_PROYECTOS}/IPC/src/Pipe/Serializador.cpp" -o "${PATH_PROYECTO
 g++ -O2 -c "${PATH_PROYECTOS}/IPC/src/Seniales/SignalHandler.cpp" -o "${PATH_PROYECTOS}/IPC/obj/SignalHandler.o"
 g++ -O2 -c "${PATH_PROYECTOS}/IPC/src/Shared_Memory/SharedMemoryException.cpp" -o "${PATH_PROYECTOS}/IPC/obj/SharedMemoryException.o"
 g++ -O2 -c "${PATH_PROYECTOS}/IPC/src/Shared_Memory/SharedMemoryBlock.cpp" -o "${PATH_PROYECTOS}/IPC/obj/SharedMemoryBlock.o"
+g++ -O2 -c "${PATH_PROYECTOS}/IPC/src/Semaforos/Semaforo.cpp" -o "${PATH_PROYECTOS}/IPC/obj/Semaforo.o"
 
-ar -r "${PATH_PROYECTOS}/IPC/libIPC.a" "${PATH_PROYECTOS}/IPC/obj/ByteStream.o" "${PATH_PROYECTOS}/IPC/obj/LockException.o" "${PATH_PROYECTOS}/IPC/obj/Lock.o" "${PATH_PROYECTOS}/IPC/obj/Deserializador.o" "${PATH_PROYECTOS}/IPC/obj/Fifo.o" "${PATH_PROYECTOS}/IPC/obj/FifoEscritura.o" "${PATH_PROYECTOS}/IPC/obj/FifoLectura.o" "${PATH_PROYECTOS}/IPC/obj/ITraductor.o" "${PATH_PROYECTOS}/IPC/obj/Serializador.o" "${PATH_PROYECTOS}/IPC/obj/SignalHandler.o" "${PATH_PROYECTOS}/IPC/obj/SharedMemoryException.o" "${PATH_PROYECTOS}/IPC/obj/SharedMemoryBlock.o"
+ar -r "${PATH_PROYECTOS}/IPC/libIPC.a" "${PATH_PROYECTOS}/IPC/obj/ByteStream.o" "${PATH_PROYECTOS}/IPC/obj/LockException.o" "${PATH_PROYECTOS}/IPC/obj/Lock.o" "${PATH_PROYECTOS}/IPC/obj/Deserializador.o" "${PATH_PROYECTOS}/IPC/obj/Fifo.o" "${PATH_PROYECTOS}/IPC/obj/FifoEscritura.o" "${PATH_PROYECTOS}/IPC/obj/FifoLectura.o" "${PATH_PROYECTOS}/IPC/obj/ITraductor.o" "${PATH_PROYECTOS}/IPC/obj/Serializador.o" "${PATH_PROYECTOS}/IPC/obj/SignalHandler.o" "${PATH_PROYECTOS}/IPC/obj/SharedMemoryException.o" "${PATH_PROYECTOS}/IPC/obj/SharedMemoryBlock.o" "${PATH_PROYECTOS}/IPC/obj/Semaforo.o"
 
 #Compilacion Comun
 mkdir -p "${PATH_PROYECTOS}/Comun/obj"
 
-g++ -O2 -c -I"${PATH_PROYECTOS}/IPC/src" "${PATH_PROYECTOS}/Comun/src/Logger.cpp" -o "${PATH_PROYECTOS}/Comun/obj/Logger.o"
+g++ -O2 -c -Wno-unused-result -I"${PATH_PROYECTOS}/IPC/src" "${PATH_PROYECTOS}/Comun/src/Logger.cpp" -o "${PATH_PROYECTOS}/Comun/obj/Logger.o"
 g++ -O2 -c -I"${PATH_PROYECTOS}/IPC/src" "${PATH_PROYECTOS}/Comun/src/Ninio.cpp" -o "${PATH_PROYECTOS}/Comun/obj/Ninio.o"
 g++ -O2 -c -I"${PATH_PROYECTOS}/IPC/src" "${PATH_PROYECTOS}/Comun/src/TraductorNinio.cpp" -o "${PATH_PROYECTOS}/Comun/obj/TraductorNinio.o"
 
@@ -72,7 +74,7 @@ g++ -L"${PATH_PROYECTOS}/IPC" -L"${PATH_PROYECTOS}/Comun" -o "${RUTA_RAIZ}/bin/b
 mkdir -p "${PATH_PROYECTOS}/ProcesoCalesita/obj"
 
 g++ -O2 -c -I"${PATH_PROYECTOS}/IPC/src" -I"${PATH_PROYECTOS}/Comun/src" "${PATH_PROYECTOS}/ProcesoCalesita/src/Calesita.cpp" -o "${PATH_PROYECTOS}/ProcesoCalesita/obj/Calesita.o"
-g++ -O2 -c -I"${PATH_PROYECTOS}/IPC/src" -I"${PATH_PROYECTOS}/Comun/src" "${PATH_PROYECTOS}/ProcesoCalesita/src/MotorCalesita.cpp" -o "${PATH_PROYECTOS}/ProcesoCalesita/obj/MotorCalesita.o"
+g++ -O2 -c -Wno-unused-result -I"${PATH_PROYECTOS}/IPC/src" -I"${PATH_PROYECTOS}/Comun/src" "${PATH_PROYECTOS}/ProcesoCalesita/src/MotorCalesita.cpp" -o "${PATH_PROYECTOS}/ProcesoCalesita/obj/MotorCalesita.o"
 g++ -O2 -c -I"${PATH_PROYECTOS}/IPC/src" -I"${PATH_PROYECTOS}/Comun/src" "${PATH_PROYECTOS}/ProcesoCalesita/src/calesita.cpp" -o "${PATH_PROYECTOS}/ProcesoCalesita/obj/calesita.o"
 
 g++ -L"${PATH_PROYECTOS}/IPC" -L"${PATH_PROYECTOS}/Comun" -o "${RUTA_RAIZ}/bin/calesita"  "${PATH_PROYECTOS}/ProcesoCalesita/obj/Calesita.o" "${PATH_PROYECTOS}/ProcesoCalesita/obj/MotorCalesita.o" "${PATH_PROYECTOS}/ProcesoCalesita/obj/calesita.o" -lComun -ljsoncpp -lIPC

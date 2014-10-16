@@ -29,11 +29,11 @@ int main(int argc, char* argv[]) {
 			++count;
 		}
 	}
-	catch(std::string& e) {
+	catch(const std::string& e) {
 		std::cerr << e << std::endl;
 		exitState = EXIT_FAILURE;
 	}
-	catch(std::exception& e) {
+	catch(const std::exception& e) {
 		//Porque puede haber roto el/los pipe/s en la boleteria
 		std::cerr << e.what() << std::endl;
 	}
