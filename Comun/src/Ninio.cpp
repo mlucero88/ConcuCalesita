@@ -38,7 +38,7 @@ void Ninio::siguienteEstado() {
 	case (SALE_CALESITA):
 		break;
 	}
-	LOGGER->Log(nombre, estado);
+	LOGGER.log(nombre, estado);
 }
 
 Estado Ninio::getEstado() const {

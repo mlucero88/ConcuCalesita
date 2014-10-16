@@ -17,8 +17,8 @@ int calcularRandom() {
 }
 
 int main(int argc, char *argv[]) {
-	if (argc != 3) {
-		std::cout << "Usage: " << argv[0] << " <CANTIDAD_NINIOS> <LOG_UNIFICADO (0/1)>" << std::endl;
+	if (argc != 2) {
+		std::cout << "Usage: " << argv[0] << " <CANTIDAD_NINIOS>" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -28,17 +28,15 @@ int main(int argc, char *argv[]) {
 
 	unsigned int cantidad = 0;
 	std::stringstream ss(argv[1]);
-	int unificado = atoi(argv[2]);
-	Logger::getLogger(unificado == 0 ? false : true);
 	// Paso ss al int y del int a ss porque no se que sucede si en argv[1]
 	// hay algo raro como "25asd"
 	ss >> cantidad;
 	ss << cantidad;
 	std::string str(ss.str());
-	Logger::getLogger()->Log("PROCESO GENERADOR INICIADO");
+	LOGGER.log("PROCESO GENERADOR INICIADO");
 	try {
-		if (cantidad != 0) {
-			Logger::getLogger()->Log("GENERADOR: Generando " + str + " ninios");
+		if (cantidad > 0) {
+			LOGGER.log(std::string("GENERADOR: Generando " + str + " ninios"));
 			TraductorNinio traductor;
 			Serializador<Ninio> serializador(traductor, Paths::getFifoGeneradorBoleteriaFilename());
 
@@ -46,7 +44,7 @@ int main(int argc, char *argv[]) {
 				ss << i;
 				str = ss.str();
 				Ninio ninio("Ninio " + str);
-				Logger::getLogger()->Log("GENERADOR: Creado ninio: " + ninio.getNombre());
+				LOGGER.log(std::string("GENERADOR: Se creo " + ninio.getNombre()));
 				serializador.serializar(ninio);
 				ninio.siguienteEstado();
 
@@ -54,14 +52,16 @@ int main(int argc, char *argv[]) {
 				//sleep(calcularRandom());
 			}
 			serializador.cerrar();
-		} else {
+		}
+		else {
 			exitState = EXIT_FAILURE;
 		}
-	} catch (const std::exception& ex) {
+	}
+	catch (const std::exception& ex) {
 		std::cerr << ex.what() << std::endl;
 	}
 	SignalHandler::getInstance()->removerHandler(SIGPIPE);
 	SignalHandler::getInstance()->destruir();
-	LOGGER->Log("PROCESO GENERADOR FINALIZADO");
+	LOGGER.log("PROCESO GENERADOR FINALIZADO");
 	exit(exitState);
 }

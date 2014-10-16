@@ -21,7 +21,6 @@ int main(int argc, char* argv[]) {
 	arg >> precio;
 	try {
 		Boleteria boleteria(precio);
-		// todo ver como hacer para q termine la boleteria
 		int count = 0;
 		int maxCount = atoi(argv[2]);
 		while (count < maxCount) {
