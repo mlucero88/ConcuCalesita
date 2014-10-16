@@ -29,25 +29,28 @@ unsigned Calesita::getDuracionVuelta() const {
 }
 
 void Calesita::agregarNinio(const Ninio& ninio) {
+	std::string mensaje;
 	if (!estaLlena()) {
 		unsigned ubicacion = ninio.getUbicacionPreferida(capacidad);
 		char buffer[50];
 		sprintf(buffer, "%d", ubicacion);
 		if (estaOcupado(ubicacion)) {
-			Logger::getLogger()->Log("CALESITA: El ninio  " + ninio.getNombre() + " intento"
-					" subirse a la ubicacion " + buffer + " "
-					"y estaba ocupada");
+			mensaje = "CALESITA: El ninio " + ninio.getNombre() + " intento"
+					" subirse a la ubicacion " + buffer + " y estaba ocupada";
+			LOGGER.log(mensaje);
 			ubicacion = encontrarLugarLibre();
 			sprintf(buffer, "%d", ubicacion);
 		}
 		ubicaciones[ubicacion] = new Ninio(ninio);
-		Logger::getLogger()->Log("CALESITA: El ninio  " + ninio.getNombre() + " se subio a"
-				" la ubicacion " + buffer);
+		mensaje = "CALESITA: El ninio " + ninio.getNombre() + " se subio a"
+				" la ubicacion " + buffer;
+		LOGGER.log(mensaje);
 		++cantidadOcupada;
 	}
 	else {
-		Logger::getLogger()->Log("CALESITA: El ninio  " + ninio.getNombre() + " no se pudo"
-				" ubicar en la calesita. Calesita Llena");
+		mensaje = "CALESITA: El ninio " + ninio.getNombre() + " no se pudo"
+				" ubicar en la calesita. Calesita Llena";
+		LOGGER.log(mensaje);
 		throw std::string("Calesita Llena");
 	}
 }

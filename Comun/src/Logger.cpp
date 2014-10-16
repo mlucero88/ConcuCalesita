@@ -1,11 +1,8 @@
 #include "Logger.h"
-#include "UnifiedLogger.h"
-#include <unistd.h>
-
 #include "FilePaths.h"
 #include <cstdarg>
 #include <ctime>
-#include <sstream>
+#include <iostream>
 
 // Get current date/time, format is YYYY-MM-DD.HH:mm:ss
 const std::string currentDateTime() {
@@ -18,72 +15,55 @@ const std::string currentDateTime() {
 	return buf;
 }
 
-// Get current date, format is YYYYMMDD
-const std::string Logger::logName(bool unified) {
-	/* todo: El problema de poner hora es que cada proceso pone su hora cuando
-	 * llama por primera vez a este metodo */
-//	time_t now = time(0);
-//	struct tm tstruct;
-//	char buf[80];
-//	tstruct = *localtime(&now);
-//	std::string filename(Paths::getLogFolder() + "Calesita_%Y%m%d.log");
-//	strftime(buf, sizeof(buf), filename.c_str(), &tstruct);
-//	return buf;
-	//return std::string(Paths::getLogFolder() + "concucalesita.log");
-	if (!unified) {
-		std::stringstream ss;
-		std::string pid;
-		ss << getpid();
-		ss >> pid;
-		return std::string("/tmp/concucalesita.") + pid + ".log";
-	} else {
-		return std::string("/tmp/concucalesita.log");
+const std::string logName() {
+	return std::string(Paths::getLogFolder() + "concucalesita.log");
+}
+
+void Logger::log(const std::string& nombre, Estado estado) {
+	try {
+		lock.seizeExclusiveLock();
+		m_Logfile << "\n" << currentDateTime() << ":\t";
+		m_Logfile << nombre << ":\t";
+		m_Logfile << enumToString(estado);
+		lock.releaseLock();
+	}
+	catch(const LockException &e) {
+		std::cerr << "Error al loguear. Fallo el lock" << std::endl;
 	}
 }
 
-void Logger::Log(const std::string& nombre, Estado estado) {
-	m_Logfile << "\n" << currentDateTime() << ":\t";
-	m_Logfile << nombre << ":\t";
-	m_Logfile << enumToString(estado);
+void Logger::log(const char* cMessage) {
+	log(std::string(cMessage));
 }
 
-void Logger::Log(const std::string& sMessage) {
-	m_Logfile << "\n" << currentDateTime() << ":\t";
-	m_Logfile << sMessage;
+void Logger::log(const std::string& sMessage) {
+	try {
+		lock.seizeExclusiveLock();
+		m_Logfile << "\n" << currentDateTime() << ":\t";
+		m_Logfile << sMessage;
+		lock.releaseLock();
+	}
+	catch(const LockException &e) {
+		std::cerr << "Error al loguear. Fallo el lock" << std::endl;
+	}
 }
 
-void Logger::Log(const char * format, ...) {
-	char sMessage[256];
-	va_list args;
-	va_start(args, format);
-	vsprintf(sMessage, format, args);
-	m_Logfile << "\n" << currentDateTime() << ":\t";
-	m_Logfile << sMessage;
-	va_end(args);
-}
-
-Logger& Logger::operator<<(const std::string& sMessage) {
-	m_Logfile << "\n" << currentDateTime() << ":\t";
-	m_Logfile << sMessage;
-	return *this;
-}
-
-Logger* Logger::getLogger(bool unified) {
-	if (m_pThis == NULL) {
-		if (!unified) {
-			m_pThis = new Logger(logName(unified));
-		} else {
-			m_pThis = new UnifiedLoggerLogger(logName(unified));
-		}
+Logger& Logger::getLogger() {
+	static Logger m_pThis;
+	if (!m_Logfile.is_open()) {
+		m_Logfile.open(logName().c_str(), std::ios::out | std::ios::app);
 	}
 	return m_pThis;
 }
 
-Logger::Logger(const std::string& name) {
-	m_Logfile.open(name.c_str(), std::ios::out | std::ios::app);
+Logger::~Logger() {
+	if (m_Logfile.is_open()) {
+		m_Logfile.close();
+	}
 }
 
-Logger::Logger(const Logger&) {
+Logger::Logger() :
+		lock(Paths::getLoggerLockFile()) {
 }
 
 Logger& Logger::operator=(const Logger&) {
@@ -107,9 +87,4 @@ std::string Logger::enumToString(Estado enumVal) {
 	}
 }
 
-Logger::~Logger() {
-	m_Logfile.close();
-}
-
-Logger* Logger::m_pThis = NULL;
-//std::ofstream Logger::m_Logfile;
+std::ofstream Logger::m_Logfile;

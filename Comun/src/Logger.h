@@ -2,6 +2,7 @@
 #define LOGGER_H
 
 #include "EstadosNinio.h"
+#include "Lock/Lock.h"
 #include <string>
 #include <fstream>
 
@@ -19,46 +20,41 @@ public:
 	 *   @param nombre: nombre del ninio.
 	 *	 @param estado
 	 */
-	virtual void Log(const std::string& nombre, Estado);
+	void log(const std::string& nombre, Estado);
 
 	/**
 	 *   Logs a message
 	 *   @param sMessage message to be logged.
 	 */
-	virtual void Log(const std::string& sMessage);
+	void log(const std::string& sMessage);
 
 	/**
-	 *   Variable Length Logger function
-	 *   @param format string for the message to be logged.
+	 *   Logs a message
+	 *   @param cMessage message to be logged.
 	 */
-	virtual void Log(const char * format, ...);
-
-	/**
-	 *   << overloaded function to Logs a message
-	 *   @param sMessage message to be logged.
-	 */
-	Logger& operator<<(const std::string& sMessage);
+	void log(const char* cMessage);
 
 	/**
 	 *   Funtion to create the instance of logger class.
 	 *   @return singleton object of Clogger class..
 	 */
-	static Logger* getLogger(bool unified = false);
+	static Logger& getLogger();
 
-	virtual ~Logger();
+	~Logger();
 
 private:
-
-	static const std::string logName(bool unified);
-
-	/**
-	 *   Singleton logger class object pointer.
-	 **/
-	static Logger* m_pThis;
 
 	/**
 	 *   Log file stream object.
 	 **/
+	static std::ofstream m_Logfile;
+
+	Lock lock;
+
+	/**
+	 *    Default constructor for the Logger class.
+	 */
+	Logger();
 
 	/**
 	 *   copy constructor for the Logger class.
@@ -71,14 +67,6 @@ private:
 	Logger& operator=(const Logger&);
 
 	std::string enumToString(Estado enumVal);
-protected:
-	/*static*/
-	std::ofstream m_Logfile;
-
-	/**
-	 *    Default constructor for the Logger class.
-	 */
-	Logger(const std::string &);
 };
 
 #endif
