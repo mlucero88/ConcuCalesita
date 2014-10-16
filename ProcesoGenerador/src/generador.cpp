@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 				ninio.siguienteEstado();
 
 				//Sleep para simular el tiempo entre ninio y ninio.
-				//sleep(calcularRandom());
+				sleep(calcularRandom());
 			}
 			serializador.cerrar();
 		} else {
