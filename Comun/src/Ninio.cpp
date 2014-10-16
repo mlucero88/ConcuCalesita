@@ -5,29 +5,40 @@
 
 Ninio::Ninio(const std::string& nombre) {
 	this->nombre = nombre;
-	estado = COLA_BOLETERIA;
-	LOGGER->Log(this->nombre, this->estado);
+	estado = NACE;
+}
+
+Ninio::Ninio(const Ninio& copia) :
+		nombre(copia.nombre), estado(copia.estado) {
+}
+
+Ninio& Ninio::operator=(const Ninio& copia) {
+	nombre = copia.nombre;
+	estado = copia.estado;
+	return *this;
 }
 
 void Ninio::siguienteEstado() {
 	switch (estado) {
-	case (COLA_BOLETERIA):
-		estado = COLA_CALESITA;
+	case (NACE):
+		estado = EN_COLA_BOLETERIA;
 		break;
-	case (COLA_CALESITA):
-		estado = EN_CALESITA;
+	case (EN_COLA_BOLETERIA):
+		estado = COMPRA_BOLETO;
 		break;
-	case (EN_CALESITA):
-		estado = COLA_SALIDA;
+	case (COMPRA_BOLETO):
+		estado = EN_COLA_CALESITA;
 		break;
-	case (COLA_SALIDA):
-		estado = SALIO;
+	case (EN_COLA_CALESITA):
+		estado = ENTRA_CALESITA;
 		break;
-	case (SALIO):
+	case (ENTRA_CALESITA):
+		estado = SALE_CALESITA;
+		break;
+	case (SALE_CALESITA):
 		break;
 	}
-
-	LOGGER->Log(this->nombre, this->estado);
+	LOGGER->Log(nombre, estado);
 }
 
 Estado Ninio::getEstado() const {

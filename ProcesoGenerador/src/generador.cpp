@@ -1,15 +1,14 @@
-#include <iostream>
 #include "Pipe/Serializador.h"
 #include "TraductorNinio.h"
+#include "Seniales/PipeSignalHandler.h"
+#include "Seniales/SignalHandler.h"
 #include "Logger.h"
+#include "FilePaths.h"
+#include <iostream>
 #include <ctime>
 #include <cstdlib>
-#include <iostream>
 #include <sstream>
-#include <FilePaths.h>
 #include <signal.h>
-#include <Seniales/PipeSignalHandler.h>
-#include <Seniales/SignalHandler.h>
 
 int calcularRandom() {
 	srand(time(NULL));
@@ -33,6 +32,7 @@ int main(int argc, char *argv[]) {
 	ss >> cantidad;
 	ss << cantidad;
 	std::string str(ss.str());
+	LOGGER->Log("PROCESO GENERADOR INICIADO");
 	try {
 		if (cantidad != 0) {
 			LOGGER->Log("GENERADOR: Generando " + str + " ninios");
@@ -44,22 +44,22 @@ int main(int argc, char *argv[]) {
 				str = ss.str();
 				Ninio ninio("Ninio " + str);
 				LOGGER->Log("GENERADOR: Creado ninio: " + ninio.getNombre());
-				ninio.setEstado(COLA_BOLETERIA);
 				serializador.serializar(ninio);
-				LOGGER->Log(
-						"GENERADOR: ninio: " + ninio.getNombre()
-						+ " en la cola de la Boleteria.");
+				ninio.siguienteEstado();
 
 				//Sleep para simular el tiempo entre ninio y ninio.
 				sleep(calcularRandom());
 			}
-		} else {
+		}
+		else {
 			exitState=EXIT_FAILURE;
 		}
-	} catch(std::exception& ex) {
+	}
+	catch(std::exception& ex) {
 		std::cerr << ex.what() << std::endl;
 	}
 	SignalHandler::getInstance()->removerHandler(SIGPIPE);
 	SignalHandler::getInstance()->destruir();
+	LOGGER->Log("PROCESO GENERADOR FINALIZADO");
 	exit(exitState);
 }

@@ -1,4 +1,5 @@
 #include "Calesita.h"
+#include "Logger.h"
 #include <string>
 
 Calesita::Calesita(unsigned capacidad, unsigned duracionVuelta) :
@@ -30,15 +31,23 @@ unsigned Calesita::getDuracionVuelta() const {
 void Calesita::agregarNinio(const Ninio& ninio) {
 	if (!estaLlena()) {
 		unsigned ubicacion = ninio.getUbicacionPreferida(capacidad);
+		char buffer[50];
+		sprintf(buffer, "%d", ubicacion);
 		if (estaOcupado(ubicacion)) {
-			// todo loguear que intento sentarse en su ubicacion preferida y estaba ocupada
+			LOGGER->Log("CALESITA: El ninio  " + ninio.getNombre() + " intento"
+					" subirse a la ubicacion " + buffer + " "
+					"y estaba ocupada");
 			ubicacion = encontrarLugarLibre();
+			sprintf(buffer, "%d", ubicacion);
 		}
 		ubicaciones[ubicacion] = new Ninio(ninio);
-		// todo loguear que se sento en la ubicacion "ubicacion"
+		LOGGER->Log("CALESITA: El ninio  " + ninio.getNombre() + " se subio a"
+				" la ubicacion " + buffer);
 		++cantidadOcupada;
 	}
 	else {
+		LOGGER->Log("CALESITA: El ninio  " + ninio.getNombre() + " no se pudo"
+				" ubicar en la calesita. Calesita Llena");
 		throw std::string("Calesita Llena");
 	}
 }
@@ -47,8 +56,7 @@ void Calesita::vaciar() {
 	if (!estaVacia()) {
 		for (unsigned int i = 0; i < capacidad; ++i) {
 			if (ubicaciones[i] != NULL) {
-				// todo loguear que el ninio salio de la calesita
-				// el pibe se obtiene asi: ubicaciones[i] (esto retorna un Ninio*)
+				ubicaciones[i]->siguienteEstado();
 				delete ubicaciones[i];
 				ubicaciones[i] = NULL;
 			}

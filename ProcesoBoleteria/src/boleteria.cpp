@@ -21,7 +21,6 @@ int main(int argc, char* argv[]) {
 	arg >> precio;
 	try {
 		Boleteria boleteria(precio);
-
 		// todo ver como hacer para q termine la boleteria
 		int count = 0;
 		int maxCount = atoi(argv[2]);
@@ -29,7 +28,6 @@ int main(int argc, char* argv[]) {
 			boleteria.atenderNinio();
 			++count;
 		}
-
 	}
 	catch(std::string& e) {
 		std::cerr << e << std::endl;

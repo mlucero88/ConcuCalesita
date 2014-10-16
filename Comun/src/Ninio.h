@@ -9,6 +9,10 @@ public:
 
 	Ninio(const std::string& nombre);
 
+	Ninio(const Ninio& copia);
+
+	Ninio& operator=(const Ninio& copia);
+
 	void siguienteEstado();
 
 	Estado getEstado() const;

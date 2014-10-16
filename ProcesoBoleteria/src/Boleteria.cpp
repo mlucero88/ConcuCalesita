@@ -1,6 +1,7 @@
 #include "Boleteria.h"
 #include "Shared_Memory/SharedMemoryBlock.h"
 #include "FilePaths.h"
+#include "Logger.h"
 #include <iostream>
 
 Boleteria::Boleteria(double precioBoleto) :
@@ -21,6 +22,7 @@ Boleteria::Boleteria(double precioBoleto) :
 		ex.append(e.what());
 		throw ex;
 	}
+	LOGGER->Log("BOLETERIA ABIERTA");
 }
 
 Boleteria::~Boleteria() {
@@ -32,15 +34,17 @@ Boleteria::~Boleteria() {
 				<< std::endl;
 	}
 	delete memoriaCompartida;
+	LOGGER->Log("BOLETERIA CERRADA");
 }
 
 void Boleteria::atenderNinio() {
-	// todo
+	// Recibe ninio del generador
 	Ninio ninio = deserializadorGenerador.deserializar();
-	// loguear que compro boleto
+	ninio.siguienteEstado();
 	caja.insertarDinero(precioBoleto);
-	// mandar ninio por el fifo a la calesita
+	// Manda ninio por el fifo a la calesita
 	serializadorCalesita.serializar(ninio);
+	ninio.siguienteEstado();
 }
 
 void Boleteria::actualizarSaldo() {
