@@ -22,15 +22,15 @@ public:
 	}
 
 	static std::string getFifoGeneradorBoleteriaFilename() {
-		return std::string(getProgramDirectory().append("/temp/fifo_gen_bol"));
+		return std::string(getProgramDirectory().append("/tmp/fifo_gen_bol"));
 	}
 
 	static std::string getFifoBoleteriaCalesitaFilename() {
-		return std::string(getProgramDirectory().append("/temp/fifo_bol_cal"));
+		return std::string(getProgramDirectory().append("/tmp/fifo_bol_cal"));
 	}
 
 	static std::string getSharedMemoryFilename() {
-		return std::string(getProgramDirectory().append("/temp/shared_memory"));
+		return std::string(getProgramDirectory().append("/tmp/shared_memory"));
 	}
 
 	static std::string getLoggerLockFile() {
