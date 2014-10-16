@@ -35,9 +35,9 @@ const std::string Logger::logName(bool unified) {
 		std::string pid;
 		ss << getpid();
 		ss >> pid;
-		return std::string("/tmp/concucalesita.") + pid + ".log";
+		return std::string(Paths::getLogFolder()) + "concucalesita." + pid + ".log";
 	} else {
-		return std::string("/tmp/concucalesita.log");
+		return std::string(Paths::getLogFolder()) + "concucalesita.log";
 	}
 }
 
@@ -45,11 +45,13 @@ void Logger::Log(const std::string& nombre, Estado estado) {
 	m_Logfile << "\n" << currentDateTime() << ":\t";
 	m_Logfile << nombre << ":\t";
 	m_Logfile << enumToString(estado);
+	m_Logfile.flush();
 }
 
 void Logger::Log(const std::string& sMessage) {
 	m_Logfile << "\n" << currentDateTime() << ":\t";
 	m_Logfile << sMessage;
+	m_Logfile.flush();
 }
 
 void Logger::Log(const char * format, ...) {
@@ -60,11 +62,13 @@ void Logger::Log(const char * format, ...) {
 	m_Logfile << "\n" << currentDateTime() << ":\t";
 	m_Logfile << sMessage;
 	va_end(args);
+	m_Logfile.flush();
 }
 
 Logger& Logger::operator<<(const std::string& sMessage) {
 	m_Logfile << "\n" << currentDateTime() << ":\t";
 	m_Logfile << sMessage;
+	m_Logfile.flush();
 	return *this;
 }
 

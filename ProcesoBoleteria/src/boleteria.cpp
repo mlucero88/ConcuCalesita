@@ -4,14 +4,17 @@
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
+#include <stdexcept>
+#include <Logger.h>
 
 int main(int argc, char* argv[]) {
-	if (argc != 3) {
-		std::cerr << "Uso: " << argv[0]
-				<< " <precio_boleto> <cant_ninios_a_atender>" << std::endl;
+	if (argc != 4) {
+		std::cerr << "Uso: " << argv[0] << " <precio_boleto> <cant_ninios_a_atender> <LOG_UNIFICADO (0/1)>" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
+	int unificado = atoi(argv[3]);
+	Logger::getLogger(unificado == 0 ? false : true);
 	PipeSignalHandler handler;
 	SignalHandler::getInstance()->registrarHandler(SIGPIPE, &handler);
 	int exitState = EXIT_SUCCESS;
@@ -24,16 +27,19 @@ int main(int argc, char* argv[]) {
 		// todo ver como hacer para q termine la boleteria
 		int count = 0;
 		int maxCount = atoi(argv[2]);
-		while (count < maxCount) {
-			boleteria.atenderNinio();
-			++count;
+		bool eof = false;
+		while (!eof) {
+			try {
+				boleteria.atenderNinio();
+			} catch (std::logic_error& error) {
+				eof = true;
+			}
 		}
-	}
-	catch(const std::string& e) {
+		boleteria.closePipe();
+	} catch (const std::string& e) {
 		std::cerr << e << std::endl;
 		exitState = EXIT_FAILURE;
-	}
-	catch(const std::exception& e) {
+	} catch (const std::exception& e) {
 		//Porque puede haber roto el/los pipe/s en la boleteria
 		std::cerr << e.what() << std::endl;
 	}

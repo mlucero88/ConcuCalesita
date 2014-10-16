@@ -43,8 +43,9 @@ int main(int argc, char *argv[]) {
 			Serializador<Ninio> serializador(traductor, Paths::getFifoGeneradorBoleteriaFilename());
 
 			for (unsigned int i = 0; i < cantidad; i++) {
-				ss << i;
-				str = ss.str();
+				std::stringstream indice;
+				indice << i;
+				str = indice.str();
 				Ninio ninio("Ninio " + str);
 				Logger::getLogger()->Log("GENERADOR: Creado ninio: " + ninio.getNombre());
 				serializador.serializar(ninio);
