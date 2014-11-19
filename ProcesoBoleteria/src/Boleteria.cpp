@@ -42,6 +42,7 @@ void Boleteria::atenderNinio() {
 	Ninio ninio = deserializadorGenerador.deserializar();
 	ninio.siguienteEstado();
 	caja.insertarDinero(precioBoleto);
+	actualizarSaldo();
 	// Manda ninio por el fifo a la calesita
 	ninio.siguienteEstado();
 	serializadorCalesita.serializar(ninio);
