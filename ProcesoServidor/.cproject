@@ -24,7 +24,7 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.1672261114" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1733683496" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.797183464" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Sockets/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/IPC/src}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.551699114" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -32,17 +32,17 @@
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.1947313970" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.exe.debug.option.debugging.level.657787093" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.848687760" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Sockets}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/IPC}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1300637125" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.351995784" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.75506688" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 								<option id="gnu.cpp.link.option.paths.1140316713" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Sockets/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/IPC/Debug}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.1369355338" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="Sockets"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="IPC"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.247246215" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -51,7 +51,7 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.1138706317" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug">
 								<option id="gnu.both.asm.option.include.paths.774629405" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Sockets}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/IPC}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1597334303" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -63,11 +63,11 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="Sockets;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="IPC;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/Sockets"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/Sockets/Debug"/>
-						<entry flags="RESOLVED" kind="libraryFile" name="Sockets" srcPrefixMapping="" srcRootPath=""/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/IPC"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/IPC/Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="IPC" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>

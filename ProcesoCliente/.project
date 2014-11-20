@@ -3,7 +3,8 @@
 	<name>ProcesoCliente</name>
 	<comment></comment>
 	<projects>
-		<project>Sockets</project>
+		<project>IPC</project>
+		<project>Protocolo</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

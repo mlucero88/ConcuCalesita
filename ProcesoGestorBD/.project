@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>IPC_Test</name>
+	<name>ProcesoGestorBD</name>
 	<comment></comment>
 	<projects>
 		<project>IPC</project>
+		<project>Protocolo</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -2,7 +2,7 @@
 #define	SOCKETTCPIP_H
 
 #include "Socket.h"
-#include "ByteStream.h"
+#include "../Common/ByteStream.h"
 
 /**
  * @brief Clase que define el comportamiento en común de un socket TCP_IP, sea

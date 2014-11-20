@@ -3,7 +3,7 @@
 	<name>ProcesoServidor</name>
 	<comment></comment>
 	<projects>
-		<project>Sockets</project>
+		<project>IPC</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
