@@ -2,28 +2,33 @@
 #define INTERFAZCLIENTE_H_
 
 #include <string>
+#include "Registro.h"
 
 class SocketCliente;
+class ProtocoloCliente;
 
 class InterfazCliente {
 public:
-	explicit InterfazCliente(const char *direccionServidor);
+	InterfazCliente(const char *direccionServidor);
+
 	bool crearSocket();
 	bool conectarAlServidor();
 	bool solicitarId();
 	bool cerrarSocket();
+
+	bool conectarAlGestor(const std::string& nombreArchivo, char caracter);
+	bool agregarRegistro(const Registro& registro);
+	bool obtenerTabla(const Registro& registro);
+
 	~InterfazCliente();
 
-	int getId() const {
-		 return idColaMensaje;
-	}
-
 private:
-	void enviarComando(const std::string &comando);
-	std::string recibirRespuesta();
+	void enviarComandoAlServidor(const std::string &comando);
+	std::string recibirRespuestaDelServidor();
 
 	SocketCliente *cliente;
-	int idColaMensaje;
+	ProtocoloCliente* protocolo;
+	int idCliente;
 };
 
 #endif

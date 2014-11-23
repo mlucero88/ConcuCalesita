@@ -25,7 +25,7 @@ public:
 	/**
 	 * @brief Destructor
 	 */
-	virtual ~MessageQueueException() throw();
+	~MessageQueueException() throw();
 
 	/**
 	 * @brief Metodo que obtiene el codigo de la funcion que genero la
@@ -38,9 +38,9 @@ public:
 	 * @brief Metodo que obtiene una descripcion del error
 	 * @return Una descripcion del error
 	 */
-	virtual const char* what() const throw();
+	const char* what() const throw();
 
-protected:
+private:
 
 	std::string error_message;
 	FunctionCode code;

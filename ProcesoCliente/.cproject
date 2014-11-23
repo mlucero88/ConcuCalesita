@@ -41,12 +41,12 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.509217405" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.1676438469" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 								<option id="gnu.cpp.link.option.paths.1739876051" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Protocolo/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/IPC/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Protocolo/Debug}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.1560891867" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="Protocolo"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="IPC"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="Protocolo"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1780420129" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -83,6 +83,7 @@
 					</externalSetting>
 				</externalSettings>
 			</storageModule>
+			<storageModule moduleId="packages"/>
 		</cconfiguration>
 		<cconfiguration id="cdt.managedbuild.config.gnu.exe.release.1815280939">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.release.1815280939" moduleId="org.eclipse.cdt.core.settings" name="Release">

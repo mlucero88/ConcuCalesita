@@ -1,6 +1,6 @@
 #include "InterfazServidor.h"
-#include "SocketServidor.h"
-#include "SocketCliente.h"
+#include "Sockets/SocketServidor.h"
+#include "Sockets/SocketCliente.h"
 #include <iostream>
 #include <cstdlib>
 #include <cstdio>
@@ -8,6 +8,7 @@
 static const int buffer_size = 50;
 static const std::string cmd_id_recibido = "OK";
 static const char cmd_fin_comando = '\n';
+static const int id_inicial = 2;
 
 InterfazServidor::InterfazServidor(const char *puerto) {
 	servidor = new SocketServidor((in_port_t) atoi(puerto));
@@ -47,7 +48,7 @@ bool InterfazServidor::escuchar(int colaMaxima) {
 }
 
 void InterfazServidor::atenderCliente() {
-	static int idNuevo = 1;
+	static int idNuevo = id_inicial;
 	SocketCliente *cliente = NULL;
 
 	/* Intento aceptar una conexion. Si falla, se considera que el fallo fue
