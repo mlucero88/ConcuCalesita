@@ -5,10 +5,7 @@
 #include <stdexcept>
 Fifo::Fifo(const std::string nombre) :
 		nombre(nombre), fd(-1) {
-	int res = mknod(static_cast<const char*>(nombre.c_str()), S_IFIFO | 0666, 0);
-//	if (res != 0) {
-//		throw std::runtime_error(strerror(errno));
-//	}
+	mknod(static_cast< const char* >(nombre.c_str()), S_IFIFO | 0666, 0);
 }
 
 Fifo::~Fifo() {

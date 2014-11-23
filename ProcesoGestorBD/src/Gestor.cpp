@@ -1,8 +1,8 @@
 #include "Gestor.h"
 #include <fstream>
 
-Gestor::Gestor() :
-		tabla() {
+Gestor::Gestor(const std::string& nombreArchivo, char caracter) :
+		tabla(), protocolo(nombreArchivo, caracter) {
 }
 
 Gestor::~Gestor() {

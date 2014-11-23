@@ -1,6 +1,7 @@
 #include "InterfazCliente.h"
-#include "ByteStream.h"
-#include "SocketCliente.h"
+#include "Sockets/SocketCliente.h"
+#include "Common/ByteStream.h"
+#include "ProtocoloCliente.h"
 #include <iostream>
 #include <cstdlib>
 
@@ -9,7 +10,7 @@ static const std::string cmd_id_recibido = "OK";
 static const char cmd_fin_comando = '\n';
 
 InterfazCliente::InterfazCliente(const char *direccionServidor) :
-		cliente(NULL), idColaMensaje(-1) {
+		cliente(NULL), protocolo(NULL), idCliente(-1) {
 	std::string direccion(direccionServidor);
 	unsigned int delimitador = direccion.find_first_of(':');
 	in_port_t puerto = (in_port_t) atoi(
@@ -42,7 +43,7 @@ bool InterfazCliente::conectarAlServidor() {
 
 bool InterfazCliente::solicitarId() {
 	try {
-		idColaMensaje = atoi(recibirRespuesta().c_str());
+		idCliente = atoi(recibirRespuestaDelServidor().c_str());
 	}
 	catch(const RecepcionExcepcion &re) {
 		std::cerr << re.what() << std::endl;
@@ -50,7 +51,7 @@ bool InterfazCliente::solicitarId() {
 	}
 	std::string comando = cmd_id_recibido + cmd_fin_comando;
 	try {
-		enviarComando(comando);
+		enviarComandoAlServidor(comando);
 	}
 	catch(const EnvioExcepcion &ee) {
 		std::cerr << ee.what() << std::endl;
@@ -70,7 +71,22 @@ bool InterfazCliente::cerrarSocket() {
 	return false;
 }
 
-void InterfazCliente::enviarComando(const std::string &comando) {
+bool InterfazCliente::conectarAlGestor(const std::string& nombreArchivo,
+		char caracter) {
+	if (idCliente > 1 && protocolo == NULL) {
+		try {
+			protocolo = new ProtocoloCliente(nombreArchivo, caracter,
+					idCliente);
+			return true;
+		}
+		catch(const std::string &e) {
+			std::cerr << e << std::endl;
+		}
+	}
+	return false;
+}
+
+void InterfazCliente::enviarComandoAlServidor(const std::string &comando) {
 	ByteStream buffer(comando.size());
 	int bytesEnviados = 0;
 	int bytesAenviar = comando.size();
@@ -83,7 +99,7 @@ void InterfazCliente::enviarComando(const std::string &comando) {
 	}
 }
 
-std::string InterfazCliente::recibirRespuesta() {
+std::string InterfazCliente::recibirRespuestaDelServidor() {
 	std::string respuesta;
 	int bytesRecibidos = 0;
 	ByteStream buffer(buffer_size);
@@ -104,4 +120,7 @@ std::string InterfazCliente::recibirRespuesta() {
 
 InterfazCliente::~InterfazCliente() {
 	delete cliente;
+	if (protocolo != NULL) {
+		delete protocolo;
+	}
 }

@@ -3,8 +3,9 @@
 #include <iostream>
 
 int main(int argc, char** argv) {
-	if (argc != 2) {
-		std::cerr << "Uso: ./cliente <nombre-host>:<puerto>\n";
+	if (argc != 4) {
+		std::cerr << "Uso: ./cliente <nombre-host>:<puerto>"
+				" <ruta_archivo_cola> <caracter>" << std::endl;
 		return EXIT_FAILURE;
 	}
 	InterfazCliente cliente(argv[1]);
@@ -18,8 +19,12 @@ int main(int argc, char** argv) {
 
 	if (cliente.solicitarId()) {
 		cliente.cerrarSocket();
-		// todo: hacer las cosas del enunciado
-		std::cout << cliente.getId() << std::endl;
+		if (cliente.conectarAlGestor(std::string(argv[2]), argv[3][0])) {
+			// todo: hacer las cosas del enunciado
+		}
+		else {
+			std::cerr << "Error al intentar conectarse al gestor" << std::endl;
+		}
 	}
 	return EXIT_SUCCESS;
 }
