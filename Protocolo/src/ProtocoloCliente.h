@@ -1,9 +1,14 @@
 #ifndef PROTOCOLOCLIENTE_H_
 #define PROTOCOLOCLIENTE_H_
 
-#include "Protocolo.h"
+#include "Mensaje.h"
+#include "Comandos.h"
+#include <string>
 
-class ProtocoloCliente: public Protocolo {
+template < class T >
+class MessageQueue;
+
+class ProtocoloCliente {
 public:
 	ProtocoloCliente(const std::string& nombreArchivo, char caracter,
 			long idCliente) /* throw (std::string) */;
@@ -15,6 +20,7 @@ public:
 	Mensaje recibirMensaje() const;
 
 private:
+	MessageQueue< Mensaje >* cola;
 	const long idCliente;
 
 	// Prohibo las siguientes operaciones

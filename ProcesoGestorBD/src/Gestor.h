@@ -13,12 +13,13 @@ public:
 	bool cargarTabla(const std::string& nombreArchivo);
 	bool persistirTabla(const std::string& nombreArchivo) const;
 
-	void agregarRegistro(const Registro& registro);
-	const std::vector< Registro >& retornarTabla() const;
+	void atenderCliente();
 
 private:
 	std::vector< Registro > tabla;
 	ProtocoloGestor protocolo;
+
+	bool agregarRegistro(const Registro& registro);
 };
 
 #endif

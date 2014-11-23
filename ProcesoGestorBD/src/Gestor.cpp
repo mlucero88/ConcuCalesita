@@ -44,10 +44,39 @@ bool Gestor::persistirTabla(const std::string& nombreArchivo) const {
 	return false;
 }
 
-void Gestor::agregarRegistro(const Registro& registro) {
+bool Gestor::agregarRegistro(const Registro& registro) {
+	// todo Hay que hacer verificacione de existencia o algo?
 	tabla.push_back(registro);
+	return true;
 }
 
-const std::vector< Registro >& Gestor::retornarTabla() const {
-	return tabla;
+void Gestor::atenderCliente() {
+	Mensaje peticion = protocolo.recibirMensaje();
+	switch (peticion.comando) {
+	case Protocolo::add_reg: {
+		if (agregarRegistro(peticion.registro)) {
+			protocolo.enviarOperacionExitosa(peticion.idRemitente);
+		}
+		else {
+			protocolo.enviarOperacionFallida(peticion.idRemitente);
+		}
+		break;
+	}
+	case Protocolo::get_regs: {
+		std::vector< Registro >::const_iterator it;
+		Registro registro;
+		for (it = tabla.begin(); it != tabla.end(); ++it) {
+			registro = *it;
+			if (!protocolo.enviarRegistro(peticion.idRemitente, registro)) {
+				protocolo.enviarOperacionFallida(peticion.idRemitente);
+				return;
+			}
+		}
+		protocolo.enviarOperacionExitosa(peticion.idRemitente);
+		break;
+	}
+	default: {
+		protocolo.enviarComandoDesconocido(peticion.idRemitente);
+	}
+	}
 }

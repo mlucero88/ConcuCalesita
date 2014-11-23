@@ -20,7 +20,9 @@ int main(int argc, char** argv) {
 	if (cliente.solicitarId()) {
 		cliente.cerrarSocket();
 		if (cliente.conectarAlGestor(std::string(argv[2]), argv[3][0])) {
-			// todo: hacer las cosas del enunciado
+			do
+				cliente.realizarAccion();
+			while (cliente.yaFinalizo());
 		}
 		else {
 			std::cerr << "Error al intentar conectarse al gestor" << std::endl;

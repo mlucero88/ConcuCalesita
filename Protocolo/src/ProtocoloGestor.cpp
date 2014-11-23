@@ -3,10 +3,24 @@
 
 ProtocoloGestor::ProtocoloGestor(const std::string& nombreArchivo,
 		char caracter) :
-		Protocolo(nombreArchivo, caracter) {
+		cola(NULL) {
+	try {
+		cola = new MessageQueue< Mensaje >(nombreArchivo, caracter);
+	}
+	catch(const MessageQueueException &e) {
+		throw std::string(e.what());
+	}
 }
 
 ProtocoloGestor::~ProtocoloGestor() {
+	if (cola) {
+		try {
+			cola->freeResources();
+		}
+		catch(const MessageQueueException &e) {
+		}
+		delete cola;
+	}
 }
 
 bool ProtocoloGestor::enviarOperacionExitosa(long idCliente) {
@@ -19,6 +33,21 @@ bool ProtocoloGestor::enviarOperacionFallida(long idCliente) {
 
 bool ProtocoloGestor::enviarComandoDesconocido(long idCliente) {
 	return enviarResultado(idCliente, Protocolo::cmd_unknown);
+}
+
+bool ProtocoloGestor::enviarRegistro(long idCliente, const Registro& registro) {
+	Mensaje mensaje;
+	mensaje.mtype = idCliente;
+	mensaje.idRemitente = Protocolo::idGestor;
+	mensaje.comando = Protocolo::reg_send;
+	mensaje.registro = registro;
+	try {
+		cola->sendMsg(mensaje);
+		return true;
+	}
+	catch(const MessageQueueException &e) {
+		return false;
+	}
 }
 
 bool ProtocoloGestor::enviarResultado(long idCliente,
@@ -36,7 +65,7 @@ bool ProtocoloGestor::enviarResultado(long idCliente,
 	}
 }
 
-Mensaje Protocolo::recibirMensaje() const {
+Mensaje ProtocoloGestor::recibirMensaje() const {
 	Mensaje mensaje;
 	try {
 		cola->receiveMsg(Protocolo::idGestor, &mensaje);

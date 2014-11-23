@@ -3,10 +3,24 @@
 
 ProtocoloCliente::ProtocoloCliente(const std::string& nombreArchivo,
 		char caracter, long idCliente) :
-		Protocolo(nombreArchivo, caracter), idCliente(idCliente) {
+		cola(NULL), idCliente(idCliente) {
+	try {
+		cola = new MessageQueue< Mensaje >(nombreArchivo, caracter);
+	}
+	catch(const MessageQueueException &e) {
+		throw std::string(e.what());
+	}
 }
 
 ProtocoloCliente::~ProtocoloCliente() {
+	if (cola) {
+		try {
+			cola->freeResources();
+		}
+		catch(const MessageQueueException &e) {
+		}
+		delete cola;
+	}
 }
 
 bool ProtocoloCliente::enviarAgregarRegistro(const Registro &registro) {

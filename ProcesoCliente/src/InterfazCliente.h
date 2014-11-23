@@ -17,8 +17,9 @@ public:
 	bool cerrarSocket();
 
 	bool conectarAlGestor(const std::string& nombreArchivo, char caracter);
-	bool agregarRegistro(const Registro& registro);
-	bool obtenerTabla(const Registro& registro);
+
+	void realizarAccion();
+	bool yaFinalizo() const;
 
 	~InterfazCliente();
 
@@ -26,9 +27,14 @@ private:
 	void enviarComandoAlServidor(const std::string &comando);
 	std::string recibirRespuestaDelServidor();
 
+	void mostrarAcciones() const;
+	void agregarRegistro();
+	void obtenerTabla();
+
 	SocketCliente *cliente;
 	ProtocoloCliente* protocolo;
 	int idCliente;
+	bool finalizo;
 };
 
 #endif
