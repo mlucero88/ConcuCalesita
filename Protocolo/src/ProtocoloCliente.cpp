@@ -13,12 +13,8 @@ ProtocoloCliente::ProtocoloCliente(const std::string& nombreArchivo,
 }
 
 ProtocoloCliente::~ProtocoloCliente() {
+	// El cliente no debe destruir la cola. La destruye el gestor
 	if (cola) {
-		try {
-			cola->freeResources();
-		}
-		catch(const MessageQueueException &e) {
-		}
 		delete cola;
 	}
 }
@@ -58,7 +54,9 @@ Mensaje ProtocoloCliente::recibirMensaje() const {
 		cola->receiveMsg(idCliente, &mensaje);
 	}
 	catch(const MessageQueueException &e) {
-		// todo
+		std::string str("No se pudo recibir el mensaje: ");
+		str.append(e.what());
+		throw str;
 	}
 	return mensaje;
 }

@@ -21,6 +21,8 @@ public:
 	void realizarAccion();
 	bool yaFinalizo() const;
 
+	int getId() const;
+
 	~InterfazCliente();
 
 private:

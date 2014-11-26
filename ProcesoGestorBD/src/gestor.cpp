@@ -1,9 +1,7 @@
 #include "Gestor.h"
 #include <iostream>
-#include <cstring>
 #include <signal.h>
 
-// todo al gestor lo lanza el servidor, viceversa o separadamente?
 /* Uso variables globales para poder cerrar el gestor con una senial */
 
 static bool cerrarGestor = false;
@@ -29,10 +27,9 @@ int main(int argc, char* argv[]) {
 	}
 	signal(SIGINT, handlerSIGINT);
 	gestor->cargarTabla(std::string(argv[1]));
-	// todo igual tengo que ver como lo desbloqueo de la cola
-	while (!cerrarGestor) {
+	do {
 		gestor->atenderCliente();
-	}
+	} while (!cerrarGestor);
 	gestor->persistirTabla(std::string(argv[1]));
 	delete gestor;
 	return 0;

@@ -1,5 +1,7 @@
 #include "Gestor.h"
 #include <fstream>
+#include <iostream>
+#include <cerrno>
 
 Gestor::Gestor(const std::string& nombreArchivo, char caracter) :
 		tabla(), protocolo(nombreArchivo, caracter) {
@@ -18,7 +20,7 @@ bool Gestor::cargarTabla(const std::string& nombreArchivo) {
 			stream.read(reinterpret_cast< char * >(&registro),
 					sizeof(registro));
 			if (!stream.eof()) {
-				tabla.push_back(registro);
+				agregarRegistro(registro);
 			}
 		} while (!stream.eof());
 		stream.close();
@@ -45,38 +47,81 @@ bool Gestor::persistirTabla(const std::string& nombreArchivo) const {
 }
 
 bool Gestor::agregarRegistro(const Registro& registro) {
-	// todo Hay que hacer verificacione de existencia o algo?
+	// todo Hay que hacer verificaciones de existencia o algo?
 	tabla.push_back(registro);
 	return true;
 }
 
 void Gestor::atenderCliente() {
-	Mensaje peticion = protocolo.recibirMensaje();
+	static int nroPeticion = 1;
+	Mensaje peticion;
+	try {
+		peticion = protocolo.recibirMensaje();
+	}
+	catch(const std::string &e) {
+		/* Si no se pudo recibir un mensaje y errno vale EINTR, fue porque se
+		 * recibio la senial de cierre del gestor que desbloqueo a msgrcv() */
+		if (errno != EINTR) {
+			std::cerr << e << std::endl;
+		}
+		return;
+	}
 	switch (peticion.comando) {
 	case Protocolo::add_reg: {
+		std::cout << "PETICIÓN " << nroPeticion << " - AGREGAR REGISTRO"
+				<< std::endl;
 		if (agregarRegistro(peticion.registro)) {
+			std::cout << "Petición " << nroPeticion
+					<< " - Registro agregado exitosamente" << std::endl;
 			protocolo.enviarOperacionExitosa(peticion.idRemitente);
 		}
 		else {
+			std::cout << "Petición " << nroPeticion
+					<< " - Registro no pudo ser agregado" << std::endl;
 			protocolo.enviarOperacionFallida(peticion.idRemitente);
 		}
 		break;
 	}
 	case Protocolo::get_regs: {
+		std::cout << "PETICIÓN " << nroPeticion << " - OBTENER TABLA"
+				<< std::endl;
 		std::vector< Registro >::const_iterator it;
 		Registro registro;
-		for (it = tabla.begin(); it != tabla.end(); ++it) {
+		bool envioExitoso = true;
+		int indice = 0;
+		for (it = tabla.begin(); it != tabla.end() && envioExitoso;
+				++it, ++indice) {
 			registro = *it;
-			if (!protocolo.enviarRegistro(peticion.idRemitente, registro)) {
-				protocolo.enviarOperacionFallida(peticion.idRemitente);
-				return;
+			envioExitoso = protocolo.enviarRegistro(peticion.idRemitente,
+					registro);
+			if (envioExitoso) {
+				std::cout << "Petición " << nroPeticion << " - Registro "
+						<< indice << " enviado exitosamente" << std::endl;
+			}
+			else {
+				std::cout << "Petición " << nroPeticion << " - Registro "
+						<< indice << " no pudo ser enviado" << std::endl;
+				envioExitoso = false;
 			}
 		}
-		protocolo.enviarOperacionExitosa(peticion.idRemitente);
+		if (envioExitoso) {
+			std::cout << "Petición " << nroPeticion
+					<< " - Tabla enviada exitosamente" << std::endl;
+			protocolo.enviarOperacionExitosa(peticion.idRemitente);
+		}
+		else {
+			std::cout << "Petición " << nroPeticion
+					<< " - Tabla no pudo ser enviada" << std::endl;
+			protocolo.enviarOperacionFallida(peticion.idRemitente);
+		}
 		break;
 	}
 	default: {
+		std::cout << "PETICIÓN " << nroPeticion << " - COMANDO DESCONOCIDO"
+				<< std::endl;
 		protocolo.enviarComandoDesconocido(peticion.idRemitente);
 	}
 	}
+	std::cout << std::endl;
+	++nroPeticion;
 }

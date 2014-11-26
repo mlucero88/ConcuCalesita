@@ -15,7 +15,7 @@ ProtocoloGestor::ProtocoloGestor(const std::string& nombreArchivo,
 ProtocoloGestor::~ProtocoloGestor() {
 	if (cola) {
 		try {
-			cola->freeResources();
+			cola->destroy();
 		}
 		catch(const MessageQueueException &e) {
 		}
@@ -71,7 +71,9 @@ Mensaje ProtocoloGestor::recibirMensaje() const {
 		cola->receiveMsg(Protocolo::idGestor, &mensaje);
 	}
 	catch(const MessageQueueException &e) {
-		// todo
+		std::string str("No se pudo recibir el mensaje: ");
+		str.append(e.what());
+		throw str;
 	}
 	return mensaje;
 }

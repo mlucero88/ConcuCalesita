@@ -88,11 +88,15 @@ bool InterfazCliente::conectarAlGestor(const std::string& nombreArchivo,
 }
 
 void InterfazCliente::realizarAccion() {
-	short opcion;
+	int opcion;
 	mostrarAcciones();
 	std::cout << std::endl;
 	std::cout << "Opción: ";
 	std::cin >> opcion;
+	if (std::cin.fail()) {
+		std::cin.clear();
+		std::cin.ignore();
+	}
 	std::cout << std::endl;
 	switch (opcion) {
 	case 1: {
@@ -108,13 +112,18 @@ void InterfazCliente::realizarAccion() {
 		break;
 	}
 	default: {
-		std::cout << "Opción incorrecta. Vuelva a intentarlo" << std::endl;
+		std::cout << "Opción incorrecta. Vuelva a intentarlo" << std::endl
+				<< std::endl;
 	}
 	}
 }
 
 bool InterfazCliente::yaFinalizo() const {
 	return finalizo;
+}
+
+int InterfazCliente::getId() const {
+	return idCliente;
 }
 
 void InterfazCliente::enviarComandoAlServidor(const std::string &comando) {
@@ -159,67 +168,85 @@ void InterfazCliente::mostrarAcciones() const {
 void InterfazCliente::agregarRegistro() {
 	Registro registro;
 	std::cout << "Completar el registro a agregar" << std::endl;
+	std::cin.ignore();
 	std::cout << "Nombre: ";
 	std::cin.getline(registro.nombre, sizeof(registro.nombre));
 	std::cout << "Dirección: ";
 	std::cin.getline(registro.direccion, sizeof(registro.direccion));
 	std::cout << "Telefono: ";
 	std::cin.getline(registro.telefono, sizeof(registro.telefono));
+	std::cout << std::endl;
 	if (protocolo->enviarAgregarRegistro(registro)) {
 		switch (protocolo->recibirMensaje().comando) {
 		case Protocolo::op_success: {
-			std::cout << "Registro agregado" << std::endl;
+			std::cout << "Registro agregado" << std::endl << std::endl;
 			return;
 		}
 		case Protocolo::op_failure: {
 			std::cout << "No se agregó el registro - operación fallida"
-					<< std::endl;
+					<< std::endl << std::endl;
 			return;
 		}
 		case Protocolo::cmd_unknown: {
 			std::cout
 					<< "No se agregó el registro - el gestor no reconoció la operación"
-					<< std::endl;
+					<< std::endl << std::endl;
 			return;
 		}
 		}
+	}
+	else {
+		std::cout << "Falló el envío de la solicitud" << std::endl << std::endl;
 	}
 }
 
 void InterfazCliente::obtenerTabla() {
 	if (protocolo->enviarSolicitarTabla()) {
 		std::vector< Registro > tabla;
-		Mensaje respuesta = protocolo->recibirMensaje();
-		switch (respuesta.comando) {
-		case Protocolo::reg_send: {
-			tabla.push_back(respuesta.registro);
-			break;
-		}
-		case Protocolo::op_success: {
-			unsigned short indice = 0;
-			std::vector< Registro >::const_iterator it;
-			std::cout << "Tabla obtenida:" << std::endl << std::endl;
-			for (it = tabla.begin(); it != tabla.end(); ++it, ++indice) {
-				std::cout << "Registro " << indice << ":" << std::endl;
-				std::cout << "Nombre: " << it->nombre << std::endl;
-				std::cout << "Dirección: " << it->direccion << std::endl;
-				std::cout << "Telefono: " << it->telefono << std::endl
-						<< std::endl;
+		Mensaje respuesta;
+		do {
+			respuesta = protocolo->recibirMensaje();
+			switch (respuesta.comando) {
+			case Protocolo::reg_send: {
+				tabla.push_back(respuesta.registro);
+				break;
 			}
-			break;
-		}
-		case Protocolo::op_failure: {
-			std::cout << "No se pudo obtener la tabla - operación fallida"
-					<< std::endl;
-			break;
-		}
-		case Protocolo::cmd_unknown: {
-			std::cout
-					<< "No se pudo obtener la tabla - el gestor no reconoció la operación"
-					<< std::endl;
-			break;
-		}
-		}
+			case Protocolo::op_success: {
+				if (!tabla.empty()) {
+					unsigned short indice = 0;
+					std::vector< Registro >::const_iterator it;
+					std::cout << "Tabla obtenida:" << std::endl << std::endl;
+					for (it = tabla.begin(); it != tabla.end();
+							++it, ++indice) {
+						std::cout << "Registro " << indice << ":" << std::endl;
+						std::cout << "Nombre: " << it->nombre << std::endl;
+						std::cout << "Dirección: " << it->direccion
+								<< std::endl;
+						std::cout << "Telefono: " << it->telefono << std::endl
+								<< std::endl;
+					}
+				}
+				else {
+					std::cout << "No hay registros en la tabla" << std::endl
+							<< std::endl;
+				}
+				break;
+			}
+			case Protocolo::op_failure: {
+				std::cout << "No se pudo obtener la tabla - operación fallida"
+						<< std::endl << std::endl;
+				break;
+			}
+			case Protocolo::cmd_unknown: {
+				std::cout << "No se pudo obtener la tabla - el gestor no"
+						" reconoció la operación" << std::endl << std::endl;
+				break;
+			}
+			}
+		} while (respuesta.comando == Protocolo::reg_send);
+	}
+	else {
+		std::cout << "Falló el envío de la solicitud" << std::endl << std::endl;
 	}
 }
 

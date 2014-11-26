@@ -17,7 +17,7 @@ public:
 	bool enviarAgregarRegistro(const Registro &registro);
 	bool enviarSolicitarTabla();
 
-	Mensaje recibirMensaje() const;
+	Mensaje recibirMensaje() const /* throw (std::string) */;
 
 private:
 	MessageQueue< Mensaje >* cola;

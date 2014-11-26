@@ -16,7 +16,7 @@ public:
 	void sendMsg(const T& message) /* throw (MessageQueueException) */;
 	ssize_t receiveMsg(long type,
 			T* buffer) const /* throw (MessageQueueException) */;
-	void freeResources() const /* throw (MessageQueueException) */;
+	void destroy() const /* throw (MessageQueueException) */;
 
 private:
 	int msgId;
@@ -43,12 +43,6 @@ MessageQueue< T >::MessageQueue(const std::string& filename, char character) {
 
 template < class T >
 MessageQueue< T >::~MessageQueue() {
-	// Destructor sin lanzamiento de excepciones
-	try {
-		freeResources();
-	}
-	catch(const MessageQueueException &e) {
-	}
 }
 
 template < class T >
@@ -70,7 +64,7 @@ ssize_t MessageQueue< T >::receiveMsg(long type, T* buffer) const {
 }
 
 template < class T >
-void MessageQueue< T >::freeResources() const {
+void MessageQueue< T >::destroy() const {
 	if (msgctl(msgId, IPC_RMID, NULL) == -1) {
 		throw MessageQueueException(MessageQueueException::msgctl);
 	}

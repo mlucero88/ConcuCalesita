@@ -20,7 +20,7 @@ public:
 
 	bool enviarRegistro(long idCliente, const Registro& registro);
 
-	Mensaje recibirMensaje() const;
+	Mensaje recibirMensaje() const /* throw (std::string) */;
 
 private:
 	MessageQueue< Mensaje >* cola;
