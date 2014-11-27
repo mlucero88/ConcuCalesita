@@ -68,7 +68,7 @@ bool ProtocoloGestor::enviarResultado(long idCliente,
 Mensaje ProtocoloGestor::recibirMensaje() const {
 	Mensaje mensaje;
 	try {
-		cola->receiveMsg(Protocolo::idGestor, &mensaje);
+		cola->receiveMsg(Protocolo::idGestor, mensaje);
 	}
 	catch(const MessageQueueException &e) {
 		std::string str("No se pudo recibir el mensaje: ");

@@ -12,8 +12,15 @@
 class MessageQueueException: public std::exception {
 public:
 
+	/**
+	 * @brief Codigo de la funcion que genero el error
+	 */
 	enum FunctionCode {
-		msgget, ftok, msgctl, msgsnd, msgrcv
+		msgget,				///< Funcion msgget()
+		ftok,				///< Funcion ftok()
+		msgctl,				///< Funcion msgctl()
+		msgsnd,				///< Funcion msgsnd()
+		msgrcv				///< Funcion msgrcv()
 	};
 
 	/**

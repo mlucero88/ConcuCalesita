@@ -51,7 +51,7 @@ bool ProtocoloCliente::enviarSolicitarTabla() {
 Mensaje ProtocoloCliente::recibirMensaje() const {
 	Mensaje mensaje;
 	try {
-		cola->receiveMsg(idCliente, &mensaje);
+		cola->receiveMsg(idCliente, mensaje);
 	}
 	catch(const MessageQueueException &e) {
 		std::string str("No se pudo recibir el mensaje: ");
