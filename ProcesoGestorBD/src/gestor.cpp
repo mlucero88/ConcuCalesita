@@ -13,24 +13,30 @@ void handlerSIGINT(int s) {
 int main(int argc, char* argv[]) {
 	if (argc != 4) {
 		std::cerr << "Uso: " << argv[0]
-				<< " <ruta_archivo_bd> <ruta_archivo_cola> <caracter>"
+				<< " <ruta_archivo_bd> <ruta_archivo_cola> <caracter_cola>"
 				<< std::endl;
 		return 1;
 	}
 	Gestor* gestor;
+
+	// Intento iniciar el gestor
 	try {
-		gestor = new Gestor(std::string(argv[2]), argv[3][0]);
+		gestor = new Gestor(std::string(argv[1]), std::string(argv[2]),
+				argv[3][0]);
 	}
 	catch(const std::string &e) {
-		std::cerr << e << std::endl;
+		std::cerr << "Error al iniciar el gestor. " << e << std::endl;
 		return 2;
 	}
+
+	// Establezco la senial para cerrar el gestor
 	signal(SIGINT, handlerSIGINT);
-	gestor->cargarTabla(std::string(argv[1]));
+
+	// Atiendo solicitudes hasta recibir la senial SIGINT
 	do {
-		gestor->atenderCliente();
+		gestor->atenderSolicitud();
 	} while (!cerrarGestor);
-	gestor->persistirTabla(std::string(argv[1]));
+
 	delete gestor;
 	return 0;
 }

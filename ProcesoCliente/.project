@@ -4,7 +4,6 @@
 	<comment></comment>
 	<projects>
 		<project>Protocolo</project>
-		<project>IPC</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

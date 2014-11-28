@@ -4,22 +4,51 @@
 #include "ProtocoloGestor.h"
 #include <vector>
 
+/**
+ * @brief Clase utilizada por el gestor para comunicarse con el cliente. Maneja
+ * internamente una cola de mensajes. Persiste en un archivo al destruirse.
+ */
 class Gestor {
 public:
-	Gestor(const std::string& nombreArchivo,
+
+	/**
+	 * @brief Constructor que instancia una cola de mensajes que usara el
+	 * gestor. En caso de que @a nombreArchivoTabla sea un archivo existente
+	 * creado por esta clase al destruirse, se cargaran los registros
+	 * contenidos en dicho archivo
+	 * @pre El archivo @a nombreArchivoCola debe existir
+	 * @param nombreArchivoTabla Nombre del archivo utilizado para cargar y/o
+	 * persisitir la base de datos
+	 * @param nombreArchivoCola Nombre de archivo utilizado para iniciar el
+	 * gestor
+	 * @param caracter Caracter utilizado para iniciar el gestor
+	 * @throw std::string Error al crear la cola de mensajes
+	 */
+	Gestor(const std::string& nombreArchivoTabla,
+			const std::string& nombreArchivoCola,
 			char caracter) /* throw (std::string) */;
+
+	/**
+	 * @brief Destructor. Persiste la base de datos
+	 */
 	~Gestor();
 
-	bool cargarTabla(const std::string& nombreArchivo);
-	bool persistirTabla(const std::string& nombreArchivo) const;
-
-	void atenderCliente();
+	/**
+	 * @brief Metodo que atiende la siguiente solicitud en la cola
+	 * @note En caso de no haber una solicitud pendiente, el metodo se
+	 * bloquea hasta recibir una solicitud o una interrupcion
+	 */
+	void atenderSolicitud();
 
 private:
+
+	void cargarTabla();
+	void persistirTabla() const;
+	bool agregarRegistro(const Registro& registro);
+
 	std::vector< Registro > tabla;
 	ProtocoloGestor protocolo;
-
-	bool agregarRegistro(const Registro& registro);
+	std::string nombreArchivoTabla;
 };
 
 #endif

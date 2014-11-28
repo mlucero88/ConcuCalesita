@@ -3,7 +3,6 @@
 	<name>Protocolo</name>
 	<comment></comment>
 	<projects>
-		<project>IPC</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

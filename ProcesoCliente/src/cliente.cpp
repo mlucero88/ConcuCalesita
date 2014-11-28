@@ -1,36 +1,30 @@
-#include "InterfazCliente.h"
-#include <cstdlib>
+#include "Cliente.h"
 #include <iostream>
 
 int main(int argc, char** argv) {
-	if (argc != 4) {
-		std::cerr << "Uso: ./cliente <nombre-host>:<puerto>"
-				" <ruta_archivo_cola> <caracter>" << std::endl;
-		return EXIT_FAILURE;
-	}
-	InterfazCliente cliente(argv[1]);
-
-	if (!cliente.crearSocket()) {
-		exit(EXIT_FAILURE);
-	}
-	if (!cliente.conectarAlServidor()) {
-		exit(EXIT_FAILURE);
+	if (argc != 3) {
+		std::cerr << "Uso: " << argv[0]
+				<< " <ruta_archivo_cola> <caracter_cola>" << std::endl;
+		return 1;
 	}
 
-	if (cliente.solicitarId()) {
-		cliente.cerrarSocket();
-		if (cliente.conectarAlGestor(std::string(argv[2]), argv[3][0])) {
-			std::cout << std::endl << "**************************"
-					<< std::endl << "	CLIENTE " << cliente.getId() << std::endl
-					<< "**************************" << std::endl
-					<< std::endl;
-			do
-				cliente.realizarAccion();
-			while (!cliente.yaFinalizo());
-		}
-		else {
-			std::cerr << "Error al intentar conectarse al gestor" << std::endl;
-		}
+	Cliente* cliente;
+
+	// Intento iniciar un cliente y conectarlo con el gestor
+	try {
+		cliente = new Cliente(std::string(argv[1]), argv[2][0]);
 	}
-	return EXIT_SUCCESS;
+	catch(const std::string &e) {
+		std::cerr << "Error al intentar conectarse al gestor. " << e
+				<< std::endl;
+		return 2;
+	}
+
+	// El cliente comineza a hacer solicitudes
+	do {
+		cliente->realizarAccion();
+	} while (!cliente->eligioSalir());
+
+	delete cliente;
+	return 0;
 }

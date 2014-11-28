@@ -5,6 +5,7 @@ ProtocoloCliente::ProtocoloCliente(const std::string& nombreArchivo,
 		char caracter, long idCliente) :
 		cola(NULL), idCliente(idCliente) {
 	try {
+		// todo hacer que el cliente no pueda crear la cola si no existe, para evitar que se ejecute si el gestor no fue iniciado, o pensar otra forma
 		cola = new MessageQueue< Mensaje >(nombreArchivo, caracter);
 	}
 	catch(const MessageQueueException &e) {
