@@ -5,7 +5,7 @@ ProtocoloGestor::ProtocoloGestor(const std::string& nombreArchivo,
 		char caracter) :
 		cola(NULL) {
 	try {
-		cola = new MessageQueue< Mensaje >(nombreArchivo, caracter);
+		cola = new MessageQueue< Mensaje >(nombreArchivo, caracter, true, true);
 	}
 	catch(const MessageQueueException &e) {
 		throw std::string(e.what());

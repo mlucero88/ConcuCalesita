@@ -78,6 +78,23 @@ void Gestor::atenderSolicitud() {
 		}
 		break;
 	}
+	case Protocolo::get_reg_by_name: {
+		std::cout << "SOLICITUD " << nroSolicitud
+				<< " - OBTENER REGISTRO POR NOMBRE" << std::endl;
+		const Registro* registro = buscarRegistroPorNombre(
+				std::string(solicitud.registro.nombre));
+		if (registro) {
+			std::cout << "Solicitud " << nroSolicitud
+					<< " - Registro obtenido exitosamente" << std::endl;
+			protocolo.enviarRegistro(solicitud.idRemitente, *registro);
+		}
+		else {
+			std::cout << "Solicitud " << nroSolicitud
+					<< " - Registro no pudo ser encontrado" << std::endl;
+			protocolo.enviarOperacionFallida(solicitud.idRemitente);
+		}
+		break;
+	}
 	default: {
 		std::cout << "SOLICITUD " << nroSolicitud << " - COMANDO DESCONOCIDO"
 				<< std::endl;
@@ -110,8 +127,9 @@ void Gestor::persistirTabla() const {
 			std::ios::trunc | std::ios::binary);
 	if (stream.is_open()) {
 		std::vector< Registro >::const_iterator it;
+		Registro registro;
 		for (it = tabla.begin(); it != tabla.end(); ++it) {
-			Registro registro = *it;
+			registro = *it;
 			/* Registros de longitud fija, no hace falta prefijar tamanio */
 			stream.write(reinterpret_cast< char * >(&registro),
 					sizeof(registro));
@@ -121,7 +139,20 @@ void Gestor::persistirTabla() const {
 }
 
 bool Gestor::agregarRegistro(const Registro& registro) {
-	// todo Hacer verificacion de unicidad
-	tabla.push_back(registro);
-	return true;
+	if (!buscarRegistroPorNombre(std::string(registro.nombre))) {
+		tabla.push_back(registro);
+		return true;
+	}
+	return false;
+}
+
+const Registro* Gestor::buscarRegistroPorNombre(
+		const std::string& nombre) const {
+	std::vector< Registro >::const_iterator it;
+	for (it = tabla.begin(); it != tabla.end(); ++it) {
+		if (nombre.compare(it->nombre) == 0) {
+			return static_cast< const Registro* >(&(*it));
+		}
+	}
+	return NULL;
 }

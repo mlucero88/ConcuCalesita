@@ -1,12 +1,12 @@
 #include "ProtocoloCliente.h"
 #include "Message_Queue/MessageQueue.h"
+#include <cstring>
 
 ProtocoloCliente::ProtocoloCliente(const std::string& nombreArchivo,
 		char caracter, long idCliente) :
 		cola(NULL), idCliente(idCliente) {
 	try {
-		// todo hacer que el cliente no pueda crear la cola si no existe, para evitar que se ejecute si el gestor no fue iniciado, o pensar otra forma
-		cola = new MessageQueue< Mensaje >(nombreArchivo, caracter);
+		cola = new MessageQueue< Mensaje >(nombreArchivo, caracter, false);
 	}
 	catch(const MessageQueueException &e) {
 		throw std::string(e.what());
@@ -40,6 +40,22 @@ bool ProtocoloCliente::enviarSolicitarTabla() {
 	mensaje.mtype = Protocolo::idGestor;
 	mensaje.idRemitente = idCliente;
 	mensaje.comando = Protocolo::get_regs;
+	try {
+		cola->sendMsg(mensaje);
+		return true;
+	}
+	catch(const MessageQueueException &e) {
+		return false;
+	}
+}
+
+bool ProtocoloCliente::enviarSolicitarRegistroPorNombre(
+		const std::string& nombre) {
+	Mensaje mensaje;
+	mensaje.mtype = Protocolo::idGestor;
+	mensaje.idRemitente = idCliente;
+	mensaje.comando = Protocolo::get_reg_by_name;
+	strcpy(mensaje.registro.nombre, nombre.c_str());
 	try {
 		cola->sendMsg(mensaje);
 		return true;

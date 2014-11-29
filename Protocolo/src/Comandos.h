@@ -1,8 +1,6 @@
 #ifndef COMANDOS_H_
 #define COMANDOS_H_
 
-// todo agregar e implementar comando solicitar registro por nombre
-
 namespace Protocolo {
 
 /**
@@ -14,6 +12,7 @@ enum comando {
 	op_success,				///< Operacion exitosa (gestor a cliente)
 	add_reg,				///< Agregar registro (cliente a gestor)
 	get_regs,				///< Obtener tabla (cliente a gestor)
+	get_reg_by_name,		///< Obtener registro por nombre (cliente a gestor)
 	reg_send				///< Envio de registro (gestor a cliente)
 };
 

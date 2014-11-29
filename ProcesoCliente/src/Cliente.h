@@ -46,6 +46,7 @@ private:
 	void mostrarAcciones() const;
 	void agregarRegistro();
 	void obtenerTabla();
+	void obtenerRegistroPorNombre();
 
 	ProtocoloCliente protocolo;
 	bool finalizo;

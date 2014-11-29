@@ -31,6 +31,10 @@ void Cliente::realizarAccion() {
 		break;
 	}
 	case 3: {
+		obtenerRegistroPorNombre();
+		break;
+	}
+	case 4: {
 		finalizo = true;
 		break;
 	}
@@ -49,7 +53,8 @@ void Cliente::mostrarAcciones() const {
 	std::cout << "¿Qué acción desea realizar?" << std::endl;
 	std::cout << "1- Agregar registro" << std::endl;
 	std::cout << "2- Imprimir tabla" << std::endl;
-	std::cout << "3- Salir" << std::endl;
+	std::cout << "3- Buscar registro por nombre" << std::endl;
+	std::cout << "4- Salir" << std::endl;
 }
 
 void Cliente::agregarRegistro() {
@@ -131,6 +136,44 @@ void Cliente::obtenerTabla() {
 			}
 			}
 		} while (respuesta.comando == Protocolo::reg_send);
+	}
+	else {
+		std::cout << "Falló el envío de la solicitud" << std::endl << std::endl;
+	}
+}
+
+void Cliente::obtenerRegistroPorNombre() {
+	Registro registro;
+	std::cout << "Ingrese el nombre a buscar" << std::endl;
+	std::cin.ignore();
+	std::cout << "Nombre: ";
+	std::cin.getline(registro.nombre, sizeof(registro.nombre));
+	if (protocolo.enviarSolicitarRegistroPorNombre(
+			std::string(registro.nombre))) {
+		Mensaje respuesta;
+		respuesta = protocolo.recibirMensaje();
+		switch (respuesta.comando) {
+		case Protocolo::reg_send: {
+			std::cout << std::endl << "Registro obtenido:" << std::endl
+					<< std::endl;
+			std::cout << "Nombre: " << respuesta.registro.nombre << std::endl;
+			std::cout << "Dirección: " << respuesta.registro.direccion
+					<< std::endl;
+			std::cout << "Telefono: " << respuesta.registro.telefono
+					<< std::endl << std::endl;
+			break;
+		}
+		case Protocolo::op_failure: {
+			std::cout << "No se pudo obtener el registro - el registro no"
+					" existe" << std::endl << std::endl;
+			break;
+		}
+		case Protocolo::cmd_unknown: {
+			std::cout << "No se pudo obtener el registro - el gestor no"
+					" reconoció la operación" << std::endl << std::endl;
+			break;
+		}
+		}
 	}
 	else {
 		std::cout << "Falló el envío de la solicitud" << std::endl << std::endl;

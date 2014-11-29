@@ -46,6 +46,8 @@ private:
 	void persistirTabla() const;
 	bool agregarRegistro(const Registro& registro);
 
+	const Registro* buscarRegistroPorNombre(const std::string& nombre) const;
+
 	std::vector< Registro > tabla;
 	ProtocoloGestor protocolo;
 	std::string nombreArchivoTabla;

@@ -16,17 +16,17 @@ class ProtocoloCliente {
 public:
 
 	/**
-	 * @brief Constructor que crea una cola de mensajes (en caso de no existir)
-	 * o se conecta a la cola (en caso de ya existir), cuyo identificador de
-	 * cola se obtiene a partir de el nombre de archivo @a nombreArchivo y el
-	 * caracter @a caracter
+	 * @brief Constructor que se conecta a la cola de mensajes cuyo
+	 * identificador de cola se obtiene a partir de el nombre de archivo
+	 * @a nombreArchivo y el caracter @a caracter
 	 * @pre El archivo @a nombreArchivo debe existir
+	 * @pre La cola de mensajes a conectarse debe existir
 	 * @param nombreArchivo Nombre de archivo utilizado para generar el
 	 * identificador de la cola
 	 * @param caracter Caracter utilizado para generar el identificador de la
 	 * cola
 	 * @param idCliente Identificador del cliente
-	 * @throw std::string Error al crear o conectarse a la cola
+	 * @throw std::string Error al conectarse a la cola
 	 */
 	ProtocoloCliente(const std::string& nombreArchivo, char caracter,
 			long idCliente) /* throw (std::string) */;
@@ -54,6 +54,15 @@ public:
 	 * @return <tt>false</tt> El mensaje no se pudo acolar
 	 */
 	bool enviarSolicitarTabla();
+
+	/**
+	 * @brief Metodo que acola una solicitud (mensaje) para obtener un registro
+	 * cuyo nombre coincida con @a nombre
+	 * @param nombre Nombre a buscar en la base de datos
+	 * @return <tt>true</tt> El mensaje se acolo exitosamente
+	 * @return <tt>false</tt> El mensaje no se pudo acolar
+	 */
+	bool enviarSolicitarRegistroPorNombre(const std::string& nombre);
 
 	/**
 	 * @brief Metodo para desacolar un mensaje de la cola de mensajes cuyo

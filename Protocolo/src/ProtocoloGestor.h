@@ -16,16 +16,16 @@ class ProtocoloGestor {
 public:
 
 	/**
-	 * @brief Constructor que crea una cola de mensajes (en caso de no existir)
-	 * o se conecta a la cola (en caso de ya existir), cuyo identificador de
+	 * @brief Constructor que crea una cola de mensajes cuyo identificador de
 	 * cola se obtiene a partir de el nombre de archivo @a nombreArchivo y el
 	 * caracter @a caracter
 	 * @pre El archivo @a nombreArchivo debe existir
+	 * @pre La cola de mensajes no debe existir
 	 * @param nombreArchivo Nombre de archivo utilizado para generar el
 	 * identificador de la cola
 	 * @param caracter Caracter utilizado para generar el identificador de la
 	 * cola
-	 * @throw std::string Error al crear o conectarse a la cola
+	 * @throw std::string Error al crear la cola
 	 */
 	ProtocoloGestor(const std::string& nombreArchivo,
 			char caracter) /* throw (std::string) */;

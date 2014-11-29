@@ -21,20 +21,27 @@ class MessageQueue {
 
 public:
 	/**
-	 * @brief Constructor que crea una cola de mensajes (en caso de no existir)
-	 * o se conecta a la cola (en caso de ya existir), cuyo identificador de
-	 * cola se obtiene a partir de el nombre de archivo @a filename y el
-	 * caracter @character
+	 * @brief Constructor que crea una cola de mensajes (en caso de no existir
+	 * y @a create es <tt>true</tt>) o se conecta a la cola (en caso de ya
+	 * existir y alguno o ambos @a failifExists o @a create son <tt>false</tt>),
+	 * cuyo identificador de cola se obtiene a partir de el nombre de
+	 * archivo @a filename y el caracter @character
 	 * @pre El archivo @a filename debe existir
 	 * @param filename Nombre de archivo utilizado para generar el identificador
 	 * de la cola
 	 * @param character Caracter utilizado para generar el identificador de la
 	 * cola
+	 * @param create Crea la cola de mensajes en caso de no existir. Se arroja
+	 * una excepcion en caso de que @a create sea <tt>false</tt> y la cola no
+	 * exista
+	 * @param failIfExists Se arroja una excepcion en caso de que @a create
+	 * sea <tt>true</tt> y la cola ya exista
 	 * @throw MessageQueueExcepcion Error generado al intentar abrir el archivo
 	 * o crear/conectarse a la cola
 	 */
-	MessageQueue(const std::string& filename,
-			char character) /* throw (MessageQueueException) */;
+	MessageQueue(const std::string& filename, char character,
+			bool create = true,
+			bool failIfExists = false) /* throw (MessageQueueException) */;
 
 	/**
 	 * @brief Destructor
@@ -57,8 +64,8 @@ public:
 	/**
 	 * @brief Metodo para desacolar un mensaje de la cola de mensajes
 	 * @note En caso de no haber un mensaje que cumpla las condiciones
-	 * solicitadas para desacolar, el proceso invocante se bloqueara en esta
-	 * llamada hasta recibir un mensaje o que la cola haya sido destruida
+	 * solicitadas para desacolar, el metodo se bloqueara hasta recibir un
+	 * mensaje o que la cola haya sido destruida
 	 * @pre Tener conexion a la cola de mensajes (es decir, no fue destruida
 	 * por el proceso en ejecucion o cualquier otro que haga uso de la misma
 	 * cola de mensajes)
@@ -99,11 +106,22 @@ private:
 };
 
 template < typename T >
-MessageQueue< T >::MessageQueue(const std::string& filename, char character) {
+MessageQueue< T >::MessageQueue(const std::string& filename, char character,
+		bool create, bool failIfExists) {
 	key_t key = ftok(filename.c_str(), character);
 
 	if (key > 0) {
-		msgId = msgget(key, 0666 | IPC_CREAT);
+		if (create) {
+			if (failIfExists) {
+				msgId = msgget(key, 0666 | IPC_CREAT | IPC_EXCL);
+			}
+			else {
+				msgId = msgget(key, 0666 | IPC_CREAT);
+			}
+		}
+		else {
+			msgId = msgget(key, 0666);
+		}
 		if (msgId < 0) {
 			throw MessageQueueException(MessageQueueException::msgget);
 		}
