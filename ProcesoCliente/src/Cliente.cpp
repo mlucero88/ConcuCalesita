@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <unistd.h>
+#include <cstdlib>
 
 Cliente::Cliente(const std::string& nombreArchivoCola, char caracter) :
 		protocolo(nombreArchivoCola, caracter, getpid()), finalizo(false) {
@@ -85,6 +86,8 @@ void Cliente::agregarRegistro() {
 					<< std::endl << std::endl;
 			return;
 		}
+		default:
+			exit(EXIT_FAILURE);
 		}
 	}
 	else {
@@ -134,6 +137,8 @@ void Cliente::obtenerTabla() {
 						" reconoció la operación" << std::endl << std::endl;
 				break;
 			}
+			default:
+				exit(EXIT_FAILURE);
 			}
 		} while (respuesta.comando == Protocolo::reg_send);
 	}
@@ -148,14 +153,14 @@ void Cliente::obtenerRegistroPorNombre() {
 	std::cin.ignore();
 	std::cout << "Nombre: ";
 	std::cin.getline(registro.nombre, sizeof(registro.nombre));
+	std::cout << std::endl;
 	if (protocolo.enviarSolicitarRegistroPorNombre(
 			std::string(registro.nombre))) {
 		Mensaje respuesta;
 		respuesta = protocolo.recibirMensaje();
 		switch (respuesta.comando) {
 		case Protocolo::reg_send: {
-			std::cout << std::endl << "Registro obtenido:" << std::endl
-					<< std::endl;
+			std::cout << "Registro obtenido:" << std::endl << std::endl;
 			std::cout << "Nombre: " << respuesta.registro.nombre << std::endl;
 			std::cout << "Dirección: " << respuesta.registro.direccion
 					<< std::endl;
@@ -173,6 +178,8 @@ void Cliente::obtenerRegistroPorNombre() {
 					" reconoció la operación" << std::endl << std::endl;
 			break;
 		}
+		default:
+			exit(EXIT_FAILURE);
 		}
 	}
 	else {

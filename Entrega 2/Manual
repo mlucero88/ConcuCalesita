@@ -1,0 +1,9 @@
+TP2 - Gestor Base de Datos
+
+Para instalar la aplicación, correr el script "instalador.sh" pasándole el directorio donde se desea instalar (el directorio debe existir). Dentro de este directorio se creará el directorio "TP2-GestorBD" con los binarios "cliente" y "gestor" dentro.S
+
+EJECUCIÓN:
+Iniciar el gestor mediante el binario "TP2-GestorBD/gestor".
+Iniciar uno o mas clientes mediante el binario "TP2-GestorBD/cliente".
+
+Para ver la documentación del código, abrir el archivo Documentacion/Documentacion.html

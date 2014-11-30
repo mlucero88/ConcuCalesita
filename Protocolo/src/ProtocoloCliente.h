@@ -2,7 +2,6 @@
 #define PROTOCOLOCLIENTE_H_
 
 #include "Mensaje.h"
-#include "Comandos.h"
 #include <string>
 
 template < class T >

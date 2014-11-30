@@ -2,6 +2,10 @@
 #define COMANDOS_H_
 
 namespace Protocolo {
+/**
+ *  \addtogroup Protocolo
+ *  @{
+ */
 
 /**
  * @brief Tipos de comandos que se pueden enviar en el campo sMensaje::comando
@@ -21,6 +25,7 @@ enum comando {
  */
 static const long idGestor = 1;
 
+/** @} */
 }
 
 #endif

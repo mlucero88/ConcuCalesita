@@ -9,10 +9,10 @@
  * @brief Clase que encapsula el manejo de una cola de mensajes (mecanismo IPC)
  * @details Utiliza template con la condicion de que dicho template sea una
  * estructura cuyo primer miembro sea un long con nombre @a mtype, y que este
- * miembro tome solo valores enteros >0
- * struct <name> {
- * 	long mtype;
- * 	...
+ * miembro tome solo valores enteros mayores a cero@n
+ * struct @<name@> {@n
+ * 		long mtype;@n
+ * 		...@n
  * };
  */
 
@@ -25,7 +25,7 @@ public:
 	 * y @a create es <tt>true</tt>) o se conecta a la cola (en caso de ya
 	 * existir y alguno o ambos @a failifExists o @a create son <tt>false</tt>),
 	 * cuyo identificador de cola se obtiene a partir de el nombre de
-	 * archivo @a filename y el caracter @character
+	 * archivo @a filename y el caracter @a character
 	 * @pre El archivo @a filename debe existir
 	 * @param filename Nombre de archivo utilizado para generar el identificador
 	 * de la cola
@@ -72,11 +72,11 @@ public:
 	 * @param type Identificador de mensaje a desacolar. En caso de ser 0, toma
 	 * el siguiente mensaje de la cola, sin importar el valor @a mtype del
 	 * mensaje. En caso de ser >0, toma el siguiente mensaje de la cola con
-	 * @a mytpe igual a @type. En caso de ser <0, toma el siguiente mensaje
+	 * @a mytpe igual a @a type. En caso de ser <0, toma el siguiente mensaje
 	 * de la cola con menor @a mtype, cuyo valor de @a mtype es menor o igual
-	 * al valor absoluto de @type
+	 * al valor absoluto de @a type
 	 * @param buffer Estructura donde se guardara el mensaje
-	 * @return Cantidad de bytes copiados en @buffer, sin contar el primer
+	 * @return Cantidad de bytes copiados en @a buffer, sin contar el primer
 	 * miembro de la estructura (mtype)
 	 * @throw MessageQueueException Error generado al intentar desacolar el
 	 * mensaje
